@@ -2,6 +2,8 @@
 
 12 MX keys, 2 EC11 encoders, 3 slide pots and 5 small OLED screens on a 30 degree wedge with a phone slot across the back. Handwired; an optional plate PCB that replaces the plate wiring is in `pcb/`. Runs on an STM32F411 "BlackPill" with QMK, USB-C only, no battery.
 
+Everything lives in [`macropad/`](macropad/); file paths below are relative to it.
+
 ```
  +---------------------------------------------+
  | ========== phone slot (recessed) ========== |   back, 100 mm tall
@@ -127,7 +129,7 @@ case/
   preview/        renders; assembly.png shows which STL goes where
 ```
 
-![The deck exploded, every part labelled with its STL](case/preview/assembly.png)
+![The deck exploded, every part labelled with its STL](macropad/case/preview/assembly.png)
 
 **What to print**
 
@@ -179,7 +181,7 @@ case/
 
 **Clear sticker film.** `case/stickers/stickers_clear.pdf` (6 sets). Clear film has no white, so the icon is left unprinted and a **white** label shows through it: print `labels_blank_white.3mf` (one colour), stick a sticker on each label with the icon centred, trim it flush with the label's edge with a craft knife (the black runs 1.5 mm past the 15.1 mm label face, no cut line), then press the label into its black cap. Laser prints are the most opaque on film; on inkjet use the transparency/film paper setting and let it dry.
 
-![The 12 keycaps with their labels](case/preview/keycaps.png)
+![The 12 keycaps with their labels](macropad/case/preview/keycaps.png)
 
 **Phone slot.** The phone (sized for an iPhone 16 Plus in a case, `phone_t` = 11) sinks 15 mm in and leans back at 70 degrees; the slot floor is square to its walls. The slot is open at both side walls, so a phone wider than the deck fits in landscape and can charge from the side; in portrait the charging port is below the slot floor.
 
@@ -199,7 +201,7 @@ case/
 
 The `default` keymap only reports: every key, knob push, knob click and slider move goes to `host/deckd.py`, a background daemon (no UI), which runs what `~/.config/deckd/config.toml` says and draws all five screens. Change a key by editing that file and `systemctl --user restart deckd`; no reflashing.
 
-![What everything does](host/layout.png)
+![What everything does](macropad/host/layout.png)
 
 - Keys: one shell command each (`run = "..."`), mostly Omarchy's own scripts.
 - E1: seek 5 s a click, hold the push and turn for previous / next track, push alone = play / pause (S4: track title and elapsed time). E2: night light temperature, push = on/off (S5).
