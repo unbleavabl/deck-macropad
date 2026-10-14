@@ -4,7 +4,7 @@ After=graphical-session.target pipewire-pulse.service
 PartOf=graphical-session.target
 
 [Service]
-ExecStart=/usr/bin/python3 %h/home-projects/handwired-kb/macropad/host/deckd.py
+ExecStart=/usr/bin/python3 %h/home-projects/deck-macropad/macropad/host/deckd.py
 Restart=always
 RestartSec=3
 
