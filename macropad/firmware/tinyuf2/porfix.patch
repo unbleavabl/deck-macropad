@@ -1,0 +1,20 @@
+diff --git i/ports/stm32f4/boards.c w/ports/stm32f4/boards.c
+index fbe65ae..c7bb652 100644
+--- i/ports/stm32f4/boards.c
++++ w/ports/stm32f4/boards.c
+@@ -40,6 +40,15 @@ void board_init(void) {
+ #ifdef BUILD_APPLICATION
+   // system_stm32h5xx.c: SystemInit() will reset vector table, set it here if we are building application
+   SCB->VTOR = (uint32_t) BOARD_FLASH_APP_START;
++#else
++  // A power-on or brown-out reset is never a user double tap. Plugging in USB can bounce the
++  // supply and reset the chip inside the double-tap window; RAM keeps the magic through that
++  // short dip, which would leave us stuck in DFU. Pin resets (reset button) and software
++  // resets (application jumping to the bootloader) still honour the magic.
++  if (RCC->CSR & (RCC_CSR_PORRSTF | RCC_CSR_BORRSTF)) {
++    TINYUF2_DBL_TAP_REG = 0;
++  }
++  RCC->CSR |= RCC_CSR_RMVF;
+ #endif
+ 
+   clock_init();

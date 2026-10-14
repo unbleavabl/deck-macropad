@@ -1,0 +1,2178 @@
+<title>Macropad Wiring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root {
+  --bg: #eef1ee;
+  --surface: #fbfcfa;
+  --inner: #f5f7f4;
+  --ink: #18201b;
+  --muted: #5a665e;
+  --line: #c6cfc8;
+  --case: #dfe5e0;
+  --part: #ffffff;
+  --row: #2459c2;
+  --col: #b86e05;
+  --enc: #117f50;
+  --gnd: #c4332a;
+  --pwr: #a08600;
+  --warn: #c4332a;
+  --rst: #7342bd;
+  --pot: #b0287a;
+  --scr: #0b7a8a;
+  --off: #a4ada7;
+  --diode: #d63a2e;
+  --band: #141414;
+  --display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #101412;
+    --surface: #171c19;
+    --inner: #1b211e;
+    --ink: #e1e7e3;
+    --muted: #96a29a;
+    --line: #313a35;
+    --case: #242b27;
+    --part: #212824;
+    --row: #72a3ff;
+    --col: #f0a640;
+    --enc: #48c98d;
+    --gnd: #ff6d60;
+    --pwr: #f2dc3c;
+    --warn: #ff6d60;
+    --rst: #b38fff;
+    --pot: #f07ac0;
+    --scr: #4fcfe0;
+    --off: #58625c;
+    --diode: #e0483b;
+    --band: #0a0a0a;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101412;
+  --surface: #171c19;
+  --inner: #1b211e;
+  --ink: #e1e7e3;
+  --muted: #96a29a;
+  --line: #313a35;
+  --case: #242b27;
+  --part: #212824;
+  --row: #72a3ff;
+  --col: #f0a640;
+  --enc: #48c98d;
+  --gnd: #ff6d60;
+  --pwr: #f2dc3c;
+  --warn: #ff6d60;
+  --rst: #b38fff;
+  --pot: #f07ac0;
+  --scr: #4fcfe0;
+  --off: #58625c;
+  --diode: #e0483b;
+  --band: #0a0a0a;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.55 var(--body);
+  padding: 0 16px;
+}
+main {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-block: 40px 72px;
+  display: grid;
+  gap: 48px;
+}
+h1, h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1.1;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: clamp(2rem, 5vw, 2.9rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.55rem; }
+p { margin: 0; max-width: 68ch; }
+code, .pin { font-family: var(--mono); font-size: 0.88em; }
+
+header { display: grid; gap: 14px; }
+.spec {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 0.92rem;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.legend li { display: flex; align-items: center; gap: 8px; }
+.swatch { width: 22px; height: 4px; border-radius: 2px; flex: none; }
+.sw-row { background: var(--row); }
+.sw-col { background: var(--col); }
+.sw-enc { background: var(--enc); }
+.sw-gnd { background: var(--gnd); }
+.sw-pwr { background: var(--pwr); }
+.sw-rst { background: var(--rst); }
+.sw-pot { background: var(--pot); }
+.sw-scr { background: var(--scr); }
+.sw-plate { background: var(--muted); }
+.sw-bus { height: 7px; background: var(--muted); box-shadow: inset 0 0 0 2.5px var(--muted), inset 0 0 0 3.5px var(--surface); }
+.sw-jump { height: 2.5px; background: var(--muted); }
+.sw-sleeve { width: 10px; height: 14px; border-radius: 3px; background: var(--muted); }
+
+section { display: grid; gap: 16px; }
+.section-head { display: grid; gap: 6px; }
+.eyebrow {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+figure {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  display: grid;
+}
+.scroll { overflow-x: auto; padding: 18px 12px 6px; }
+.scroll svg { display: block; width: 100%; height: auto; min-width: 660px; margin: 0 auto; }
+.scroll.narrow svg { max-width: 820px; }
+figcaption {
+  border-top: 1px solid var(--line);
+  padding: 14px 18px 16px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+figcaption strong { color: var(--ink); font-weight: 600; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 28px; }
+.notes div { display: grid; gap: 4px; align-content: start; }
+.notes h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+.notes p { font-size: 0.95rem; }
+
+.warn {
+  border: 1.5px solid var(--warn);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: grid;
+  gap: 4px;
+  background: var(--surface);
+}
+.warn strong { color: var(--warn); font-family: var(--display); font-size: 1.05rem; letter-spacing: 0.02em; }
+
+ol.check { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: step; }
+ol.check li { counter-increment: step; }
+ol.check label {
+  display: grid;
+  grid-template-columns: 2.2em 18px 22px 6.5em 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+ol.check label::before {
+  content: counter(step);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  grid-column: 1;
+  grid-row: 1;
+}
+ol.check input { grid-column: 2; margin: 0; width: 17px; height: 17px; accent-color: var(--enc); }
+ol.check .swatch { grid-column: 3; }
+ol.check label:hover { background: var(--surface); }
+ol.check input:focus-visible { outline: 2px solid var(--row); outline-offset: 2px; }
+.grp { font-family: var(--display); font-weight: 600; color: var(--muted); }
+.what { font-size: 0.95rem; }
+ol.check input:checked ~ .what { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--off); }
+.check-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+.progress { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+button {
+  font: 600 0.9rem var(--display);
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+button:hover { border-color: var(--muted); }
+button:focus-visible { outline: 2px solid var(--row); outline-offset: 2px; }
+
+ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; max-width: 72ch; }
+
+@media (max-width: 560px) {
+  ol.check label { grid-template-columns: 1.6em 18px 1fr; }
+  ol.check .swatch { display: none; }
+  ol.check .grp { grid-column: 3; }
+  ol.check .what { grid-column: 3; }
+}
+
+/* drawing */
+svg text { font-family: var(--body); }
+.case { fill: var(--case); stroke: var(--line); stroke-width: 1.5; }
+.case-in { fill: var(--inner); stroke: var(--line); stroke-width: 1; }
+.boss { fill: var(--case); stroke: var(--line); stroke-width: 1; }
+.part { fill: var(--part); stroke: var(--muted); stroke-width: 1.2; }
+.shaft { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.board { fill: var(--case); stroke: var(--muted); stroke-width: 1.4; }
+.usb { fill: var(--muted); }
+.jst { fill: var(--part); stroke: var(--muted); stroke-width: 1.2; }
+.w { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.halo { fill: none; stroke: var(--inner); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+.w-row { stroke: var(--row); }
+.w-col { stroke: var(--col); }
+.w-enc { stroke: var(--enc); }
+.w-gnd { stroke: var(--gnd); }
+.w-pwr { stroke: var(--pwr); }
+.w-rst { stroke: var(--rst); }
+.w-pot { stroke: var(--pot); }
+.w-scr { stroke: var(--scr); }
+.w-off { stroke: var(--off); stroke-dasharray: 3 4; }
+.diode { fill: var(--diode); }
+.band { fill: var(--band); }
+.diode-edge { fill: none; stroke: var(--ink); stroke-width: 1; }
+.w-plain { stroke: var(--muted); }
+.joint { fill: var(--surface); stroke-width: 2.2; }
+.j-row { stroke: var(--row); }
+.j-col { stroke: var(--col); }
+.j-enc { stroke: var(--enc); }
+.j-pot { stroke: var(--pot); }
+.j-scr { stroke: var(--scr); }
+.j-pwr { stroke: var(--pwr); }
+.j-rst { stroke: var(--rst); }
+.j-gnd { stroke: var(--gnd); }
+.pad { fill: var(--surface); stroke-width: 2.6; }
+.pad-row { stroke: var(--row); }
+.pad-col { stroke: var(--col); }
+.pad-enc { stroke: var(--enc); }
+.pad-gnd { stroke: var(--gnd); }
+.pad-pwr { stroke: var(--pwr); }
+.pad-rst { stroke: var(--rst); }
+.pad-pot { stroke: var(--pot); }
+.pad-scr { stroke: var(--scr); }
+.pad-off { stroke: var(--off); stroke-width: 1.6; }
+.pad-used { stroke: var(--ink); stroke-width: 2.2; }
+.pad-avoid { stroke: var(--off); stroke-dasharray: 2 2; }
+.tag { fill: var(--surface); stroke-width: 1.5; }
+.tag-row { stroke: var(--row); }
+.tag-col { stroke: var(--col); }
+.tag-enc { stroke: var(--enc); }
+.tag-gnd { stroke: var(--gnd); }
+.tag-pwr { stroke: var(--pwr); }
+.tag-rst { stroke: var(--rst); }
+.tag-pot { stroke: var(--pot); }
+.tag-scr { stroke: var(--scr); }
+.tag-avoid { stroke: var(--off); stroke-dasharray: 3 3; }
+.tagtxt { font-family: var(--mono); font-size: 11.5px; font-weight: 600; }
+.tt-row { fill: var(--row); }
+.tt-col { fill: var(--col); }
+.tt-enc { fill: var(--enc); }
+.tt-gnd { fill: var(--gnd); }
+.tt-pwr { fill: var(--pwr); }
+.tt-rst { fill: var(--rst); }
+.tt-pot { fill: var(--pot); }
+.tt-scr { fill: var(--scr); }
+.tt-avoid { fill: var(--muted); }
+.keyname { font-family: var(--display); font-size: 14px; font-weight: 600; fill: var(--muted); }
+.pinlbl { font-size: 11px; font-weight: 600; fill: var(--muted); }
+.pinmini { font-family: var(--mono); font-size: 7.5px; font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--part); stroke-width: 3px; stroke-linejoin: round; }
+.edge { font-family: var(--display); font-size: 12px; font-weight: 600; letter-spacing: 0.16em; fill: var(--muted); }
+.port { font-family: var(--mono); font-size: 10.5px; fill: var(--muted); }
+.padname { font-family: var(--mono); font-size: 12px; font-weight: 600; fill: var(--ink); }
+.plate { fill: var(--line); stroke: var(--muted); stroke-width: 1; }
+.metal { fill: var(--case); stroke: var(--muted); stroke-width: 1.2; }
+.knob { fill: var(--part); stroke: var(--ink); stroke-width: 1.4; }
+.spacer { fill: var(--col); fill-opacity: 0.35; stroke: var(--col); stroke-width: 1.2; }
+.cap { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
+.leader { fill: none; stroke: var(--muted); stroke-width: 1; }
+.note { font-size: 13.5px; fill: var(--ink); }
+.pinbig { font-family: var(--mono); font-size: 15px; font-weight: 600; fill: var(--ink); }
+.usblbl { font-family: var(--display); font-size: 12px; font-weight: 600; fill: var(--surface); }
+
+/* bare copper buses and the part picker */
+.bus { fill: none; stroke-width: 7; stroke-linecap: round; }
+.bus-row { stroke: var(--row); }
+.bus-col { stroke: var(--col); }
+.bus-gnd { stroke: var(--gnd); }
+.bus-pwr { stroke: var(--pwr); }
+.bus-core { fill: none; stroke: var(--surface); stroke-width: 1.6; stroke-linecap: round; opacity: 0.9; }
+.sleeve { fill: var(--muted); stroke: var(--surface); stroke-width: 1.5; }
+.keepout { fill: var(--inner); stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.busname { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; fill: var(--muted); paint-order: stroke; stroke: var(--case); stroke-width: 3px; }
+svg.wiring [data-o] { cursor: pointer; transition: opacity 0.15s; }
+svg.wiring.filtered [data-o]:not(.on) { opacity: 0.08; }
+.picker {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--bg);
+  box-shadow: 0 0 0 100vmax var(--bg);
+  clip-path: inset(0 -100vmax);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0 12px;
+  display: grid; gap: 8px;
+}
+.picker .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.picker .lbl { font-family: var(--display); font-weight: 600; font-size: 0.85rem; color: var(--muted); width: 4.2em; }
+.picker button { padding: 4px 10px; font-size: 0.82rem; }
+.picker button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.picker .status { font-size: 0.92rem; min-height: 1.4em; }
+.picker .status strong { font-weight: 600; }
+.wide { --w: min(1440px, calc(100vw - 32px)); width: var(--w); margin-inline: calc((100% - var(--w)) / 2); }
+.figbar { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; align-items: center; padding: 12px 18px 0; }
+.hint { font-size: 0.9rem; color: var(--muted); }
+.scroll.zoomed svg { min-width: 1900px; }
+.hinge { fill: var(--inner); stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 6 5; }
+.hingetxt { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; fill: var(--muted); }
+.hingesub { font-size: 11.5px; fill: var(--muted); }
+.badge { fill: var(--surface); stroke-width: 2; }
+.badge-row { stroke: var(--row); } .badge-col { stroke: var(--col); } .badge-enc { stroke: var(--enc); }
+.badge-gnd { stroke: var(--gnd); } .badge-pwr { stroke: var(--pwr); } .badge-pot { stroke: var(--pot); }
+.badge-scr { stroke: var(--scr); } .badge-rst { stroke: var(--rst); }
+.badgetxt { font-family: var(--mono); font-size: 10.5px; font-weight: 700; }
+.pinlabel { font-family: var(--mono); font-size: 10px; font-weight: 600; fill: var(--muted); }
+.cutline { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 8 5; }
+.plug { fill: var(--ink); opacity: 0.85; }
+.plugname { font-family: var(--display); font-weight: 700; font-size: 15px; fill: var(--ink); }
+.ribbon { fill: var(--inner); stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 3; }
+.lanenum { font-family: var(--mono); font-size: 8.5px; font-weight: 600; }
+.padmini { font-family: var(--mono); font-size: 8.5px; fill: var(--muted); }
+.link, .link-halo { display: none; }
+.link-halo { fill: none; stroke: var(--inner); stroke-width: 9; }
+svg.wiring.filtered g.on .link, svg.wiring.filtered g.on .link-halo { display: inline; }
+svg.wiring [data-w] { cursor: pointer; }
+svg.wiring.hide-done .wdone { display: none; }
+.figbar .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table.harness { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+table.harness th, table.harness td { text-align: left; padding: 7px 12px; border-bottom: 1px solid var(--line); }
+table.harness thead th { font-family: var(--display); font-weight: 600; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; }
+table.harness tr.grouprow th { font-family: var(--display); font-weight: 600; background: var(--inner); }
+table.harness tbody tr[data-w] { cursor: pointer; }
+table.harness tbody tr[data-w]:hover, table.harness tbody tr[data-w]:focus-visible { background: var(--inner); outline: none; }
+table.harness tbody tr.active { background: var(--inner); box-shadow: inset 3px 0 0 var(--ink); }
+table.harness td.to { font-family: var(--mono); font-size: 0.88rem; }
+table.harness tr.done td:not(:last-child) { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--off); }
+table.harness input { width: 17px; height: 17px; accent-color: var(--enc); }
+.numbadge { display: inline-grid; place-items: center; min-width: 26px; height: 22px; padding: 0 5px; border-radius: 11px; border: 2px solid; font-family: var(--mono); font-size: 0.8rem; font-weight: 700; background: var(--surface); }
+.nb-row { border-color: var(--row); color: var(--row); } .nb-col { border-color: var(--col); color: var(--col); }
+.nb-enc { border-color: var(--enc); color: var(--enc); } .nb-gnd { border-color: var(--gnd); color: var(--gnd); }
+.nb-pwr { border-color: var(--pwr); color: var(--pwr); } .nb-pot { border-color: var(--pot); color: var(--pot); }
+.nb-scr { border-color: var(--scr); color: var(--scr); } .nb-rst { border-color: var(--rst); color: var(--rst); }
+/* harness table with a copy of the drawing beside it */
+.hsplit { display: grid; gap: 16px; align-items: start; }
+.hside { display: none; }
+@media (min-width: 1000px) {
+  .hsplit { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .hside {
+    display: block; position: sticky; top: var(--stick, 140px);
+    height: calc(100vh - var(--stick, 140px) - 16px);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px;
+  }
+  .hside svg { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+  .hside.panning svg, .hside.panning svg * { cursor: grabbing; }
+  .hside .zoombar { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; }
+  .hside .zoombar button { padding: 2px 9px; font-size: 0.85rem; min-width: 30px; background: var(--surface); }
+}
+</style>
+
+<main>
+  <header>
+    <span class="eyebrow">Handwired · no PCB · tilted deck</span>
+    <h1>Macropad Wiring</h1>
+    <div class="spec">
+      <span>12 × MX</span><span>2 × EC11</span><span>3 × slide pot</span><span>5 × 0.96" SSD1306 (I2C, via TCA9548A)</span><span>STM32F411 BlackPill · QMK</span><span>4 × 4 matrix, col2row</span><span>14 × 1N4148</span><span>USB-C only</span>
+    </div>
+    <ul class="legend" aria-label="Wire colours">
+      <li><span class="swatch sw-bus"></span>Thick line: bare copper bus</li>
+      <li><span class="swatch sw-jump"></span>Thin line: insulated jumper</li>
+      <li><span class="swatch sw-sleeve"></span>Sleeve where two buses cross</li>
+      <li><span class="numbadge nb-gnd">9</span>Same number at both ends of a wire</li>
+      <li><span class="swatch sw-row"></span>Rows</li>
+      <li><span class="swatch sw-col"></span>Columns</li>
+      <li><span class="swatch sw-enc"></span>Encoder A / B</li>
+      <li><span class="swatch sw-pot"></span>Slider pin 2</li>
+      <li><span class="swatch sw-scr"></span>Screen wires</li>
+      <li><span class="swatch sw-pwr"></span>3V3</li>
+      <li><span class="swatch sw-gnd"></span>Ground (G)</li>
+      <li><span class="swatch sw-rst"></span>Buttons</li>
+    </ul>
+  </header>
+
+  <nav class="picker" aria-label="Show one part">
+    <div class="row"><span class="lbl">Parts</span><button type="button" data-pick="K1" aria-pressed="false">K1</button><button type="button" data-pick="K2" aria-pressed="false">K2</button><button type="button" data-pick="K3" aria-pressed="false">K3</button><button type="button" data-pick="K4" aria-pressed="false">K4</button><button type="button" data-pick="K5" aria-pressed="false">K5</button><button type="button" data-pick="K6" aria-pressed="false">K6</button><button type="button" data-pick="K7" aria-pressed="false">K7</button><button type="button" data-pick="K8" aria-pressed="false">K8</button><button type="button" data-pick="K9" aria-pressed="false">K9</button><button type="button" data-pick="K10" aria-pressed="false">K10</button><button type="button" data-pick="K11" aria-pressed="false">K11</button><button type="button" data-pick="K12" aria-pressed="false">K12</button><button type="button" data-pick="E1" aria-pressed="false">E1</button><button type="button" data-pick="E2" aria-pressed="false">E2</button><button type="button" data-pick="Slider 1" aria-pressed="false">Slider 1</button><button type="button" data-pick="Slider 2" aria-pressed="false">Slider 2</button><button type="button" data-pick="Slider 3" aria-pressed="false">Slider 3</button><button type="button" data-pick="S1" aria-pressed="false">S1</button><button type="button" data-pick="S2" aria-pressed="false">S2</button><button type="button" data-pick="S3" aria-pressed="false">S3</button><button type="button" data-pick="S4" aria-pressed="false">S4</button><button type="button" data-pick="S5" aria-pressed="false">S5</button><button type="button" data-pick="MUX" aria-pressed="false">MUX</button><button type="button" data-pick="Buttons" aria-pressed="false">Buttons</button></div>
+    <div class="row"><span class="lbl">Buses</span><button type="button" data-bus="row0" aria-pressed="false">Row 0</button><button type="button" data-bus="row1" aria-pressed="false">Row 1</button><button type="button" data-bus="row2" aria-pressed="false">Row 2</button><button type="button" data-bus="row3" aria-pressed="false">Row 3</button><button type="button" data-bus="col0" aria-pressed="false">Col 0</button><button type="button" data-bus="col1" aria-pressed="false">Col 1</button><button type="button" data-bus="col2" aria-pressed="false">Col 2</button><button type="button" data-bus="col3" aria-pressed="false">Col 3</button><button type="button" data-bus="gnd" aria-pressed="false">GND</button><button type="button" data-bus="3v3" aria-pressed="false">3V3</button><button type="button" data-clear>Show all</button></div>
+    <div class="status" id="pick-status" aria-live="polite">Pick a part, a bus or a wire number, here or in the drawing, to see only its wires.</div>
+  </nav>
+
+  <section class="wide">
+    <div class="section-head">
+      <span class="eyebrow">The wiring</span>
+      <h2>Lid above, plate below, to scale</h2>
+      <p>Lay the case out like this while you wire: the lid inside-up at the top, the plate upside down below it, their back edges together. <strong>The plate</strong> carries the bare copper buses (thick lines: one per row, one per column, a GND and a 3V3 loop) and short insulated jumpers from every part to them. <strong>The lid</strong> holds the BlackPill, the multiplexer and the two buttons. <strong>The 27 wires between them</strong> are soldered at the plate end, gather along the plate's back edge into five flat ribbons, and end in five multi-pin Dupont plugs, <strong>A to E</strong>, on male header pins on the BlackPill and the multiplexer, so the lid unplugs. Each wire's number is on its line in the fold band and in the table below: tape it at both ends. Mark pin 1 of each plug and its header so it only goes on one way.</p>
+    </div>
+    <figure>
+      <div class="figbar">
+        <span class="hint">Click or hover a number, part or bus. Pick a number, part or bus to see only its wires.</span>
+        <span class="btns">
+          <button type="button" id="hidedone" aria-pressed="false">Hide finished wires</button>
+          <button type="button" id="zoom" aria-pressed="false">Zoom in</button>
+        </span>
+      </div>
+      <div class="scroll" id="mainscroll">
+<svg class="wiring" viewBox="140.0 -740.0 1193.2 1714.0" role="img" aria-label="The case opened up for wiring, to scale: the lid at the top, turned round, with the BlackPill, the TCA9548A multiplexer and the B and R buttons; the plate below it, upside down, with its bare copper buses and every part. 27 numbered wires leave the plate, gather along its back edge into five flat ribbons, cross the fold and end in five plugs, A to E, on the BlackPill and multiplexer header pins.">
+<path d="M190.0 -690.0 V-222.0 Q190.0 -186.0 226.0 -186.0 H1217.2 Q1253.2 -186.0 1253.2 -222.0 V-690.0 Z" class="case"/>
+<line x1="190.0" y1="-690.0" x2="1253.2" y2="-690.0" class="cutline"/>
+<text x="721.6" y="-720.0" class="edge" text-anchor="middle">LID, INSIDE FACING UP, TURNED ROUND · ITS BACK EDGE (USB-C) AT THE FOLD · BLACKPILL UPSIDE DOWN · TO SCALE</text>
+<text x="721.6" y="-702.0" class="hingesub" text-anchor="middle">its front 66 mm, empty, not shown</text>
+<circle cx="1211.2" cy="-258.0" r="24.0" class="boss"/>
+<circle cx="232.0" cy="-258.0" r="24.0" class="boss"/>
+<rect x="658.6" y="-525.0" width="126.0" height="319.2" rx="5" class="board"/>
+<rect x="694.6" y="-204.0" width="54.0" height="18.0" rx="5" class="usb"/>
+<text x="721.6" y="-210.0" class="port" text-anchor="middle">USB-C</text>
+<rect x="694.6" y="-304.8" width="18.0" height="18.0" rx="2" class="part" stroke-dasharray="4 3"/>
+<circle cx="675.9" cy="-221.4" r="4.2" class="pad pad-off"/>
+<text x="684.9" y="-218.4" class="padmini" text-anchor="start">B12</text>
+<circle cx="675.9" cy="-236.6" r="4.2" class="pad pad-off"/>
+<text x="684.9" y="-233.6" class="padmini" text-anchor="start">B13</text>
+<circle cx="675.9" cy="-251.9" r="4.2" class="pad pad-used"/>
+<text x="684.9" y="-248.9" class="padmini" text-anchor="start">B14</text>
+<circle cx="675.9" cy="-267.1" r="4.2" class="pad pad-off"/>
+<text x="684.9" y="-264.1" class="padmini" text-anchor="start">B15</text>
+<circle cx="675.9" cy="-282.4" r="4.2" class="pad pad-used"/>
+<text x="684.9" y="-279.4" class="padmini" text-anchor="start">A8</text>
+<circle cx="675.9" cy="-297.6" r="4.2" class="pad pad-avoid"/>
+<text x="684.9" y="-294.6" class="padmini" text-anchor="start">A9</text>
+<circle cx="675.9" cy="-312.8" r="4.2" class="pad pad-avoid"/>
+<text x="684.9" y="-309.8" class="padmini" text-anchor="start">A10</text>
+<circle cx="675.9" cy="-328.1" r="4.2" class="pad pad-avoid"/>
+<text x="684.9" y="-325.1" class="padmini" text-anchor="start">A11</text>
+<circle cx="675.9" cy="-343.3" r="4.2" class="pad pad-avoid"/>
+<text x="684.9" y="-340.3" class="padmini" text-anchor="start">A12</text>
+<circle cx="675.9" cy="-358.6" r="4.2" class="pad pad-used"/>
+<text x="684.9" y="-355.6" class="padmini" text-anchor="start">A15</text>
+<circle cx="675.9" cy="-373.8" r="4.2" class="pad pad-off"/>
+<text x="684.9" y="-370.8" class="padmini" text-anchor="start">B3</text>
+<circle cx="675.9" cy="-389.0" r="4.2" class="pad pad-off"/>
+<text x="684.9" y="-386.0" class="padmini" text-anchor="start">B4</text>
+<circle cx="675.9" cy="-404.3" r="4.2" class="pad pad-off"/>
+<text x="684.9" y="-401.3" class="padmini" text-anchor="start">B5</text>
+<circle cx="675.9" cy="-419.5" r="4.2" class="pad pad-used"/>
+<text x="684.9" y="-416.5" class="padmini" text-anchor="start">B6</text>
+<circle cx="675.9" cy="-434.8" r="4.2" class="pad pad-used"/>
+<text x="684.9" y="-431.8" class="padmini" text-anchor="start">B7</text>
+<circle cx="675.9" cy="-450.0" r="4.2" class="pad pad-used"/>
+<text x="684.9" y="-447.0" class="padmini" text-anchor="start">B8</text>
+<circle cx="675.9" cy="-465.2" r="4.2" class="pad pad-used"/>
+<text x="684.9" y="-462.2" class="padmini" text-anchor="start">B9</text>
+<circle cx="675.9" cy="-480.5" r="4.2" class="pad pad-off"/>
+<text x="684.9" y="-477.5" class="padmini" text-anchor="start">5V</text>
+<circle cx="675.9" cy="-495.7" r="4.2" class="pad pad-used"/>
+<text x="684.9" y="-492.7" class="padmini" text-anchor="start">G</text>
+<circle cx="675.9" cy="-511.0" r="4.2" class="pad pad-used"/>
+<text x="684.9" y="-508.0" class="padmini" text-anchor="start">3V3</text>
+<circle cx="767.3" cy="-221.4" r="4.2" class="pad pad-off"/>
+<text x="758.3" y="-218.4" class="padmini" text-anchor="end">5V</text>
+<circle cx="767.3" cy="-236.6" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-233.6" class="padmini" text-anchor="end">G</text>
+<circle cx="767.3" cy="-251.9" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-248.9" class="padmini" text-anchor="end">3V3</text>
+<circle cx="767.3" cy="-267.1" r="4.2" class="pad pad-off"/>
+<text x="758.3" y="-264.1" class="padmini" text-anchor="end">B10</text>
+<circle cx="767.3" cy="-282.4" r="4.2" class="pad pad-avoid"/>
+<text x="758.3" y="-279.4" class="padmini" text-anchor="end">B2</text>
+<circle cx="767.3" cy="-297.6" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-294.6" class="padmini" text-anchor="end">B1</text>
+<circle cx="767.3" cy="-312.8" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-309.8" class="padmini" text-anchor="end">B0</text>
+<circle cx="767.3" cy="-328.1" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-325.1" class="padmini" text-anchor="end">A7</text>
+<circle cx="767.3" cy="-343.3" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-340.3" class="padmini" text-anchor="end">A6</text>
+<circle cx="767.3" cy="-358.6" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-355.6" class="padmini" text-anchor="end">A5</text>
+<circle cx="767.3" cy="-373.8" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-370.8" class="padmini" text-anchor="end">A4</text>
+<circle cx="767.3" cy="-389.0" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-386.0" class="padmini" text-anchor="end">A3</text>
+<circle cx="767.3" cy="-404.3" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-401.3" class="padmini" text-anchor="end">A2</text>
+<circle cx="767.3" cy="-419.5" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-416.5" class="padmini" text-anchor="end">A1</text>
+<circle cx="767.3" cy="-434.8" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-431.8" class="padmini" text-anchor="end">A0</text>
+<circle cx="767.3" cy="-450.0" r="4.2" class="pad pad-used"/>
+<text x="758.3" y="-447.0" class="padmini" text-anchor="end">R</text>
+<circle cx="767.3" cy="-465.2" r="4.2" class="pad pad-avoid"/>
+<text x="758.3" y="-462.2" class="padmini" text-anchor="end">C15</text>
+<circle cx="767.3" cy="-480.5" r="4.2" class="pad pad-avoid"/>
+<text x="758.3" y="-477.5" class="padmini" text-anchor="end">C14</text>
+<circle cx="767.3" cy="-495.7" r="4.2" class="pad pad-avoid"/>
+<text x="758.3" y="-492.7" class="padmini" text-anchor="end">C13</text>
+<circle cx="767.3" cy="-511.0" r="4.2" class="pad pad-off"/>
+<text x="758.3" y="-508.0" class="padmini" text-anchor="end">VB</text>
+<g data-o="MUX" data-n="body">
+<rect x="358.0" y="-414.0" width="186.0" height="126.0" rx="5" class="board"/>
+<text x="451.0" y="-349.0" class="port" text-anchor="middle">TCA9548A mux</text>
+<text x="451.0" y="-335.0" class="pinmini" text-anchor="middle">A0–A2, RST free</text>
+</g>
+<g data-o="MUX" data-n="sd0">
+<circle cx="520.0" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="523.0" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 523.0 -308.0)">SD0</text>
+</g>
+<g data-o="MUX" data-n="sc0">
+<circle cx="504.8" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="507.8" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 507.8 -308.0)">SC0</text>
+</g>
+<g data-o="MUX" data-n="sd1">
+<circle cx="489.5" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="492.5" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 492.5 -308.0)">SD1</text>
+</g>
+<g data-o="MUX" data-n="sc1">
+<circle cx="474.3" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="477.3" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 477.3 -308.0)">SC1</text>
+</g>
+<g data-o="MUX" data-n="sd2">
+<circle cx="459.0" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="462.0" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 462.0 -308.0)">SD2</text>
+</g>
+<g data-o="MUX" data-n="sc2">
+<circle cx="443.8" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="446.8" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 446.8 -308.0)">SC2</text>
+</g>
+<g data-o="MUX" data-n="sd3">
+<circle cx="428.6" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="431.6" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 431.6 -308.0)">SD3</text>
+</g>
+<g data-o="MUX" data-n="sc3">
+<circle cx="413.3" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="416.3" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 416.3 -308.0)">SC3</text>
+</g>
+<g data-o="MUX" data-n="sd4">
+<circle cx="398.1" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="401.1" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 401.1 -308.0)">SD4</text>
+</g>
+<g data-o="MUX" data-n="sc4">
+<circle cx="382.8" cy="-300.0" r="4.2" class="pad pad-used"/>
+<text x="385.8" y="-308.0" class="padmini" text-anchor="end" transform="rotate(90 385.8 -308.0)">SC4</text>
+</g>
+<g data-o="Buttons" data-n="body">
+<rect x="661.6" y="-639.0" width="36.0" height="36.0" rx="4" class="part"/>
+<text x="679.6" y="-616.0" class="port" text-anchor="middle">B</text>
+</g>
+<g data-o="Buttons" data-n="body">
+<rect x="745.6" y="-639.0" width="36.0" height="36.0" rx="4" class="part"/>
+<text x="763.6" y="-616.0" class="port" text-anchor="middle">R</text>
+</g>
+<rect x="759.7" y="-442.4" width="15.2" height="152.4" rx="2" class="plug"/>
+<text x="767.3" y="-448.4" class="plugname" text-anchor="middle">A</text>
+<rect x="375.2" y="-307.6" width="152.4" height="15.2" rx="2" class="plug"/>
+<text x="365.2" y="-310.6" class="plugname" text-anchor="end">plug B</text>
+<rect x="668.3" y="-518.6" width="15.2" height="76.2" rx="2" class="plug"/>
+<text x="675.9" y="-524.6" class="plugname" text-anchor="middle">C</text>
+<rect x="668.3" y="-290.0" width="15.2" height="45.7" rx="2" class="plug"/>
+<text x="675.9" y="-296.0" class="plugname" text-anchor="middle">D</text>
+<rect x="668.3" y="-366.2" width="15.2" height="15.2" rx="2" class="plug"/>
+<text x="675.9" y="-372.2" class="plugname" text-anchor="middle">E</text>
+<g data-o="MUX" data-n="mux-scl" data-w="L1">
+<polyline points="421.7,-402.0 421.7,-645.0 714.4,-645.0 714.4,-419.5 679.9,-419.5" class="halo"/>
+<polyline points="421.7,-402.0 421.7,-645.0 714.4,-645.0 714.4,-419.5 679.9,-419.5" class="w w-scr"/>
+<circle cx="421.7" cy="-402.0" r="3.6" class="pad pad-used"/>
+<text x="421.7" y="-409.0" class="padmini" text-anchor="middle">SCL</text>
+<circle cx="675.9" cy="-419.5" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="MUX" data-n="mux-sda" data-w="L2">
+<polyline points="406.5,-402.0 406.5,-651.0 719.2,-651.0 719.2,-434.8 679.9,-434.8" class="halo"/>
+<polyline points="406.5,-402.0 406.5,-651.0 719.2,-651.0 719.2,-434.8 679.9,-434.8" class="w w-scr"/>
+<circle cx="406.5" cy="-402.0" r="3.6" class="pad pad-used"/>
+<text x="406.5" y="-409.0" class="padmini" text-anchor="middle">SDA</text>
+<circle cx="675.9" cy="-434.8" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="MUX" data-n="mux-gnd" data-w="L3">
+<polyline points="391.2,-402.0 391.2,-657.0 724.0,-657.0 724.0,-236.6 763.3,-236.6" class="halo"/>
+<polyline points="391.2,-402.0 391.2,-657.0 724.0,-657.0 724.0,-236.6 763.3,-236.6" class="w w-gnd"/>
+<circle cx="391.2" cy="-402.0" r="3.6" class="pad pad-used"/>
+<text x="391.2" y="-409.0" class="padmini" text-anchor="middle">GND</text>
+<circle cx="767.3" cy="-236.6" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="MUX" data-n="mux-vin" data-w="L4">
+<polyline points="376.0,-402.0 376.0,-663.0 728.8,-663.0 728.8,-251.9 763.3,-251.9" class="halo"/>
+<polyline points="376.0,-402.0 376.0,-663.0 728.8,-663.0 728.8,-251.9 763.3,-251.9" class="w w-pwr"/>
+<circle cx="376.0" cy="-402.0" r="3.6" class="pad pad-used"/>
+<text x="376.0" y="-409.0" class="padmini" text-anchor="middle">VIN</text>
+<circle cx="767.3" cy="-251.9" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="Buttons" data-n="rst" data-w="L5">
+<polyline stroke-dasharray="7 5" points="709.6,-304.8 709.6,-594.0 685.6,-594.0 685.6,-603.0" class="halo"/>
+<polyline stroke-dasharray="7 5" points="709.6,-304.8 709.6,-594.0 685.6,-594.0 685.6,-603.0" class="w w-rst"/>
+<polyline stroke-dasharray="7 5" points="704.8,-304.8 704.8,-586.8 673.6,-586.8 673.6,-603.0" class="halo"/>
+<polyline stroke-dasharray="7 5" points="704.8,-304.8 704.8,-586.8 673.6,-586.8 673.6,-603.0" class="w w-rst"/>
+<circle cx="709.6" cy="-304.8" r="3.4" class="joint j-rst"/>
+<circle cx="704.8" cy="-304.8" r="3.4" class="joint j-rst"/>
+</g>
+<g data-o="Buttons" data-n="rst" data-w="L6">
+<polyline points="763.3,-450.0 738.4,-450.0 738.4,-537.0 770.8,-537.0 770.8,-603.0" class="halo"/>
+<polyline points="763.3,-450.0 738.4,-450.0 738.4,-537.0 770.8,-537.0 770.8,-603.0" class="w w-rst"/>
+<polyline points="756.4,-603.0 756.4,-543.0 733.6,-543.0 733.6,-236.6" class="halo"/>
+<polyline points="756.4,-603.0 756.4,-543.0 733.6,-543.0 733.6,-236.6" class="w w-gnd"/>
+<circle cx="767.3" cy="-450.0" r="3.4" class="joint j-rst"/>
+<circle cx="733.6" cy="-236.6" r="3.4" class="joint j-gnd"/>
+</g>
+<rect x="170.0" y="-186.0" width="1103.2" height="180.0" rx="10" class="hinge"/>
+<text x="1257.2" y="-98.0" class="hingetxt" text-anchor="end">FOLD · 30 mm OF SLACK</text>
+<text x="1257.2" y="-81.0" class="hingesub" text-anchor="end">five flat ribbons, one per plug</text>
+<rect x="791.6" y="-182.0" width="107.2" height="172.0" rx="4" class="ribbon"/>
+<rect x="630.8" y="-182.0" width="20.8" height="172.0" rx="4" class="ribbon"/>
+<rect x="609.2" y="-182.0" width="10.0" height="172.0" rx="4" class="ribbon"/>
+<rect x="555.2" y="-182.0" width="42.4" height="172.0" rx="4" class="ribbon"/>
+<rect x="377.8" y="-182.0" width="147.2" height="172.0" rx="4" class="ribbon"/>
+<rect x="190.0" y="210.0" width="1063.2" height="708.0" rx="14" class="case"/>
+<text x="721.6" y="952.0" class="edge" text-anchor="middle">PLATE, UPSIDE DOWN · ITS FRONT EDGE</text>
+<rect x="1181.2" y="189.6" width="48.0" height="74.4" rx="3" class="keepout"/>
+<text x="1205.2" y="237.0" class="pinmini" text-anchor="middle">dock</text>
+<text x="1205.2" y="249.0" class="pinmini" text-anchor="middle">screw</text>
+<rect x="214.0" y="189.6" width="48.0" height="74.4" rx="3" class="keepout"/>
+<text x="238.0" y="237.0" class="pinmini" text-anchor="middle">dock</text>
+<text x="238.0" y="249.0" class="pinmini" text-anchor="middle">screw</text>
+<g data-o="K1" data-n="body">
+<rect x="649.6" y="313.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="691.6" y="380.4" class="keyname" text-anchor="middle">K1</text>
+</g>
+<g data-o="K2" data-n="body">
+<rect x="523.6" y="313.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="565.6" y="380.4" class="keyname" text-anchor="middle">K2</text>
+</g>
+<g data-o="K3" data-n="body">
+<rect x="397.6" y="313.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="439.6" y="380.4" class="keyname" text-anchor="middle">K3</text>
+</g>
+<g data-o="K4" data-n="body">
+<rect x="649.6" y="439.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="691.6" y="506.4" class="keyname" text-anchor="middle">K4</text>
+</g>
+<g data-o="K5" data-n="body">
+<rect x="523.6" y="439.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="565.6" y="506.4" class="keyname" text-anchor="middle">K5</text>
+</g>
+<g data-o="K6" data-n="body">
+<rect x="397.6" y="439.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="439.6" y="506.4" class="keyname" text-anchor="middle">K6</text>
+</g>
+<g data-o="K7" data-n="body">
+<rect x="649.6" y="565.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="691.6" y="632.4" class="keyname" text-anchor="middle">K7</text>
+</g>
+<g data-o="K8" data-n="body">
+<rect x="523.6" y="565.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="565.6" y="632.4" class="keyname" text-anchor="middle">K8</text>
+</g>
+<g data-o="K9" data-n="body">
+<rect x="397.6" y="565.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="439.6" y="632.4" class="keyname" text-anchor="middle">K9</text>
+</g>
+<g data-o="K10" data-n="body">
+<rect x="649.6" y="691.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="691.6" y="758.4" class="keyname" text-anchor="middle">K10</text>
+</g>
+<g data-o="K11" data-n="body">
+<rect x="523.6" y="691.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="565.6" y="758.4" class="keyname" text-anchor="middle">K11</text>
+</g>
+<g data-o="K12" data-n="body">
+<rect x="397.6" y="691.2" width="84.0" height="84.0" rx="3" class="part"/>
+<text x="439.6" y="758.4" class="keyname" text-anchor="middle">K12</text>
+</g>
+<g data-o="E1" data-n="body">
+<rect x="257.5" y="579.6" width="72.0" height="72.0" rx="3" class="part"/>
+<circle cx="293.5" cy="615.6" r="21.0" class="shaft"/>
+<text x="293.5" y="621.0" class="keyname" text-anchor="middle">E1</text>
+<text x="293.5" y="591.6" class="pinlbl" text-anchor="middle">push</text>
+</g>
+<g data-o="E2" data-n="body">
+<rect x="257.5" y="319.2" width="72.0" height="72.0" rx="3" class="part"/>
+<circle cx="293.5" cy="355.2" r="21.0" class="shaft"/>
+<text x="293.5" y="360.6" class="keyname" text-anchor="middle">E2</text>
+<text x="293.5" y="331.2" class="pinlbl" text-anchor="middle">push</text>
+</g>
+<g data-o="Slider 1" data-n="body">
+<rect x="1122.7" y="300.0" width="54.0" height="360.0" rx="4" class="part"/>
+<rect x="1146.7" y="348.0" width="6" height="264.0" rx="3" class="shaft"/>
+<text transform="rotate(-90 1149.7 480.0)" x="1149.7" y="480.0" class="keyname vert" text-anchor="middle">Slider 1</text>
+</g>
+<g data-o="Slider 2" data-n="body">
+<rect x="966.7" y="300.0" width="54.0" height="360.0" rx="4" class="part"/>
+<rect x="990.7" y="348.0" width="6" height="264.0" rx="3" class="shaft"/>
+<text transform="rotate(-90 993.7 480.0)" x="993.7" y="480.0" class="keyname vert" text-anchor="middle">Slider 2</text>
+</g>
+<g data-o="Slider 3" data-n="body">
+<rect x="810.7" y="300.0" width="54.0" height="360.0" rx="4" class="part"/>
+<rect x="834.7" y="348.0" width="6" height="264.0" rx="3" class="shaft"/>
+<text transform="rotate(-90 837.7 480.0)" x="837.7" y="480.0" class="keyname vert" text-anchor="middle">Slider 3</text>
+</g>
+<g data-o="S1" data-n="body">
+<rect x="1076.2" y="672.6" width="147.0" height="160.8" rx="3" class="part"/>
+<text x="1094.5" y="756.6" class="keyname" text-anchor="middle">S1</text>
+</g>
+<g data-o="S2" data-n="body">
+<rect x="920.2" y="672.6" width="147.0" height="160.8" rx="3" class="part"/>
+<text x="938.5" y="756.6" class="keyname" text-anchor="middle">S2</text>
+</g>
+<g data-o="S3" data-n="body">
+<rect x="764.2" y="672.6" width="147.0" height="160.8" rx="3" class="part"/>
+<text x="782.5" y="756.6" class="keyname" text-anchor="middle">S3</text>
+</g>
+<g data-o="S4" data-n="body">
+<rect x="220.0" y="672.6" width="147.0" height="160.8" rx="3" class="part"/>
+<text x="238.3" y="756.6" class="keyname" text-anchor="middle">S4</text>
+</g>
+<g data-o="S5" data-n="body">
+<rect x="220.0" y="405.0" width="147.0" height="160.8" rx="3" class="part"/>
+<text x="238.3" y="489.0" class="keyname" text-anchor="middle">S5</text>
+</g>
+<g data-o="bus" data-n="row0">
+<line x1="701.3" y1="298.2" x2="380.8" y2="298.2" class="bus bus-row"/>
+<line x1="701.3" y1="298.2" x2="380.8" y2="298.2" class="bus-core"/>
+<text x="376.8" y="292.2" class="busname" text-anchor="end">ROW 0</text>
+</g>
+<g data-o="bus" data-n="row1">
+<line x1="701.3" y1="412.2" x2="415.6" y2="412.2" class="bus bus-row"/>
+<line x1="701.3" y1="412.2" x2="415.6" y2="412.2" class="bus-core"/>
+<text x="411.6" y="406.2" class="busname" text-anchor="end">ROW 1</text>
+</g>
+<g data-o="bus" data-n="row2">
+<line x1="701.3" y1="550.2" x2="380.8" y2="550.2" class="bus bus-row"/>
+<line x1="701.3" y1="550.2" x2="380.8" y2="550.2" class="bus-core"/>
+<text x="376.8" y="544.2" class="busname" text-anchor="end">ROW 2</text>
+</g>
+<g data-o="bus" data-n="row3">
+<line x1="701.3" y1="676.2" x2="415.6" y2="676.2" class="bus bus-row"/>
+<line x1="701.3" y1="676.2" x2="415.6" y2="676.2" class="bus-core"/>
+<text x="411.6" y="670.2" class="busname" text-anchor="end">ROW 3</text>
+</g>
+<g data-o="bus" data-n="col0">
+<line x1="714.5" y1="340.0" x2="714.5" y2="718.0" class="bus bus-col"/>
+<line x1="714.5" y1="340.0" x2="714.5" y2="718.0" class="bus-core"/>
+<text x="720.5" y="732.0" class="busname" text-anchor="start">COL 0</text>
+</g>
+<g data-o="bus" data-n="row1 col0">
+<rect x="709.5" y="403.2" width="10" height="18" rx="3" class="sleeve"/>
+</g>
+<g data-o="bus" data-n="row2 col0">
+<rect x="709.5" y="541.2" width="10" height="18" rx="3" class="sleeve"/>
+</g>
+<g data-o="bus" data-n="row3 col0">
+<rect x="709.5" y="667.2" width="10" height="18" rx="3" class="sleeve"/>
+</g>
+<g data-o="bus" data-n="col1">
+<line x1="588.5" y1="340.0" x2="588.5" y2="718.0" class="bus bus-col"/>
+<line x1="588.5" y1="340.0" x2="588.5" y2="718.0" class="bus-core"/>
+<text x="594.5" y="732.0" class="busname" text-anchor="start">COL 1</text>
+</g>
+<g data-o="bus" data-n="row1 col1">
+<rect x="583.5" y="403.2" width="10" height="18" rx="3" class="sleeve"/>
+</g>
+<g data-o="bus" data-n="row2 col1">
+<rect x="583.5" y="541.2" width="10" height="18" rx="3" class="sleeve"/>
+</g>
+<g data-o="bus" data-n="row3 col1">
+<rect x="583.5" y="667.2" width="10" height="18" rx="3" class="sleeve"/>
+</g>
+<g data-o="bus" data-n="col2">
+<line x1="462.5" y1="340.0" x2="462.5" y2="718.0" class="bus bus-col"/>
+<line x1="462.5" y1="340.0" x2="462.5" y2="718.0" class="bus-core"/>
+<text x="468.5" y="732.0" class="busname" text-anchor="start">COL 2</text>
+</g>
+<g data-o="bus" data-n="row1 col2">
+<rect x="457.5" y="403.2" width="10" height="18" rx="3" class="sleeve"/>
+</g>
+<g data-o="bus" data-n="row2 col2">
+<rect x="457.5" y="541.2" width="10" height="18" rx="3" class="sleeve"/>
+</g>
+<g data-o="bus" data-n="row3 col2">
+<rect x="457.5" y="667.2" width="10" height="18" rx="3" class="sleeve"/>
+</g>
+<g data-o="bus" data-n="gnd">
+<line x1="1229.2" y1="850.8" x2="307.4" y2="850.8" class="bus bus-gnd"/>
+<line x1="1229.2" y1="850.8" x2="307.4" y2="850.8" class="bus-core"/>
+<line x1="1229.2" y1="276.0" x2="779.2" y2="276.0" class="bus bus-gnd"/>
+<line x1="1229.2" y1="276.0" x2="779.2" y2="276.0" class="bus-core"/>
+<text x="545.2" y="868.0" class="busname" text-anchor="middle">GND BUS</text>
+</g>
+<g data-o="bus" data-n="3v3">
+<line x1="1220.8" y1="841.2" x2="301.4" y2="841.2" class="bus bus-pwr"/>
+<line x1="1220.8" y1="841.2" x2="301.4" y2="841.2" class="bus-core"/>
+<line x1="1220.8" y1="283.2" x2="770.2" y2="283.2" class="bus bus-pwr"/>
+<line x1="1220.8" y1="283.2" x2="770.2" y2="283.2" class="bus-core"/>
+<text x="545.2" y="829.6" class="busname" text-anchor="middle">3V3 BUS</text>
+</g>
+<g data-o="K1" data-n="row0">
+<line x1="676.4" y1="324.7" x2="676.4" y2="298.2" class="w w-row"/>
+<rect x="670.4" y="301.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="670.4" y="301.9" width="12" height="7.7" class="band"/>
+<rect x="670.4" y="301.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="676.4" cy="298.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K2" data-n="row0">
+<line x1="550.4" y1="324.7" x2="550.4" y2="298.2" class="w w-row"/>
+<rect x="544.4" y="301.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="544.4" y="301.9" width="12" height="7.7" class="band"/>
+<rect x="544.4" y="301.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="550.4" cy="298.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K3" data-n="row0">
+<line x1="424.4" y1="324.7" x2="424.4" y2="298.2" class="w w-row"/>
+<rect x="418.4" y="301.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="418.4" y="301.9" width="12" height="7.7" class="band"/>
+<rect x="418.4" y="301.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="424.4" cy="298.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K4" data-n="row1">
+<line x1="676.4" y1="450.7" x2="676.4" y2="412.2" class="w w-row"/>
+<rect x="670.4" y="421.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="670.4" y="421.9" width="12" height="7.7" class="band"/>
+<rect x="670.4" y="421.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="676.4" cy="412.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K5" data-n="row1">
+<line x1="550.4" y1="450.7" x2="550.4" y2="412.2" class="w w-row"/>
+<rect x="544.4" y="421.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="544.4" y="421.9" width="12" height="7.7" class="band"/>
+<rect x="544.4" y="421.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="550.4" cy="412.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K6" data-n="row1">
+<line x1="424.4" y1="450.7" x2="424.4" y2="412.2" class="w w-row"/>
+<rect x="418.4" y="421.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="418.4" y="421.9" width="12" height="7.7" class="band"/>
+<rect x="418.4" y="421.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="424.4" cy="412.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K7" data-n="row2">
+<line x1="676.4" y1="576.7" x2="676.4" y2="550.2" class="w w-row"/>
+<rect x="670.4" y="553.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="670.4" y="553.9" width="12" height="7.7" class="band"/>
+<rect x="670.4" y="553.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="676.4" cy="550.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K8" data-n="row2">
+<line x1="550.4" y1="576.7" x2="550.4" y2="550.2" class="w w-row"/>
+<rect x="544.4" y="553.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="544.4" y="553.9" width="12" height="7.7" class="band"/>
+<rect x="544.4" y="553.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="550.4" cy="550.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K9" data-n="row2">
+<line x1="424.4" y1="576.7" x2="424.4" y2="550.2" class="w w-row"/>
+<rect x="418.4" y="553.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="418.4" y="553.9" width="12" height="7.7" class="band"/>
+<rect x="418.4" y="553.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="424.4" cy="550.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K10" data-n="row3">
+<line x1="676.4" y1="702.7" x2="676.4" y2="676.2" class="w w-row"/>
+<rect x="670.4" y="679.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="670.4" y="679.9" width="12" height="7.7" class="band"/>
+<rect x="670.4" y="679.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="676.4" cy="676.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K11" data-n="row3">
+<line x1="550.4" y1="702.7" x2="550.4" y2="676.2" class="w w-row"/>
+<rect x="544.4" y="679.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="544.4" y="679.9" width="12" height="7.7" class="band"/>
+<rect x="544.4" y="679.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="550.4" cy="676.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K12" data-n="row3">
+<line x1="424.4" y1="702.7" x2="424.4" y2="676.2" class="w w-row"/>
+<rect x="418.4" y="679.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="418.4" y="679.9" width="12" height="7.7" class="band"/>
+<rect x="418.4" y="679.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<circle cx="424.4" cy="676.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="bus" data-n="col3">
+<polyline points="278.5,573.6 215.2,573.6 215.2,313.2 278.5,313.2" class="halo"/>
+<polyline points="278.5,573.6 215.2,573.6 215.2,313.2 278.5,313.2" class="w w-col"/>
+<circle cx="215.2" cy="313.2" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="E1" data-n="row2">
+<polyline points="308.5,573.6 380.8,573.6 380.8,550.2" class="w w-row"/>
+<rect x="333.8" y="567.6" width="21.6" height="12.0" rx="2" class="diode"/>
+<rect x="346.8" y="567.6" width="8.6" height="12.0" class="band"/>
+<rect x="333.8" y="567.6" width="21.6" height="12.0" rx="2" class="diode-edge"/>
+<circle cx="380.8" cy="550.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="E2" data-n="row0">
+<polyline points="308.5,313.2 380.8,313.2 380.8,298.2" class="w w-row"/>
+<rect x="333.8" y="307.2" width="21.6" height="12.0" rx="2" class="diode"/>
+<rect x="346.8" y="307.2" width="8.6" height="12.0" class="band"/>
+<rect x="333.8" y="307.2" width="21.6" height="12.0" rx="2" class="diode-edge"/>
+<circle cx="380.8" cy="298.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="bus" data-n="gnd">
+<polyline points="1229.2,850.8 1229.2,276.0" class="halo"/>
+<polyline points="1229.2,850.8 1229.2,276.0" class="w w-gnd"/>
+<circle cx="1229.2" cy="850.8" r="3.4" class="joint j-gnd"/>
+<circle cx="1229.2" cy="276.0" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="bus" data-n="3v3">
+<polyline points="1220.8,841.2 1220.8,283.2" class="halo"/>
+<polyline points="1220.8,841.2 1220.8,283.2" class="w w-pwr"/>
+<circle cx="1220.8" cy="841.2" r="3.4" class="joint j-pwr"/>
+<circle cx="1220.8" cy="283.2" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="E1" data-n="gnd">
+<polyline points="293.5,657.6 293.5,664.8 301.1,664.8 301.1,680.4" class="halo"/>
+<polyline points="293.5,657.6 293.5,664.8 301.1,664.8 301.1,680.4" class="w w-gnd"/>
+<circle cx="301.1" cy="680.4" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="E2" data-n="gnd">
+<polyline points="293.5,397.2 293.5,404.4 301.1,404.4 301.1,412.8" class="halo"/>
+<polyline points="293.5,397.2 293.5,404.4 301.1,404.4 301.1,412.8" class="w w-gnd"/>
+<circle cx="301.1" cy="412.8" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="Slider 1" data-n="3v3">
+<polyline points="1134.7,291.0 1134.7,283.2" class="halo"/>
+<polyline points="1134.7,291.0 1134.7,283.2" class="w w-pwr"/>
+<circle cx="1134.7" cy="283.2" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="Slider 1" data-n="pot1">
+<polyline points="1149.7,291.0 1194.7,291.0 1194.7,315.0" class="halo"/>
+<polyline points="1149.7,291.0 1194.7,291.0 1194.7,315.0" class="w w-pot"/>
+<circle cx="1194.7" cy="315.0" r="3.4" class="joint j-pot"/>
+</g>
+<g data-o="Slider 1" data-n="gnd">
+<polyline points="1194.7,357.0 1194.7,369.0 1212.7,369.0 1212.7,276.0" class="halo"/>
+<polyline points="1194.7,357.0 1194.7,369.0 1212.7,369.0 1212.7,276.0" class="w w-gnd"/>
+<circle cx="1194.7" cy="357.0" r="3.4" class="joint j-gnd"/>
+<circle cx="1212.7" cy="276.0" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="Slider 1" data-n="pot1 gnd">
+<polyline points="1194.7,315.0 1194.7,324.0" class="w w-pot"/>
+<polyline points="1194.7,348.0 1194.7,357.0" class="w w-gnd"/>
+<rect x="1185.1" y="324.0" width="19.2" height="24.0" rx="2" class="cap"/>
+<text x="1197.7" y="385.0" class="port" text-anchor="middle">100 nF</text>
+</g>
+<g data-o="Slider 1" data-n="gnd">
+<polyline points="1149.7,651.0 1149.7,664.8 1157.3,664.8 1157.3,680.4" class="halo"/>
+<polyline points="1149.7,651.0 1149.7,664.8 1157.3,664.8 1157.3,680.4" class="w w-gnd"/>
+<circle cx="1149.7" cy="651.0" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="Slider 2" data-n="3v3">
+<polyline points="978.7,291.0 978.7,283.2" class="halo"/>
+<polyline points="978.7,291.0 978.7,283.2" class="w w-pwr"/>
+<circle cx="978.7" cy="283.2" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="Slider 2" data-n="pot2">
+<polyline points="993.7,291.0 1038.7,291.0 1038.7,315.0" class="halo"/>
+<polyline points="993.7,291.0 1038.7,291.0 1038.7,315.0" class="w w-pot"/>
+<circle cx="1038.7" cy="315.0" r="3.4" class="joint j-pot"/>
+</g>
+<g data-o="Slider 2" data-n="gnd">
+<polyline points="1038.7,357.0 1038.7,369.0 1056.7,369.0 1056.7,276.0" class="halo"/>
+<polyline points="1038.7,357.0 1038.7,369.0 1056.7,369.0 1056.7,276.0" class="w w-gnd"/>
+<circle cx="1038.7" cy="357.0" r="3.4" class="joint j-gnd"/>
+<circle cx="1056.7" cy="276.0" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="Slider 2" data-n="pot2 gnd">
+<polyline points="1038.7,315.0 1038.7,324.0" class="w w-pot"/>
+<polyline points="1038.7,348.0 1038.7,357.0" class="w w-gnd"/>
+<rect x="1029.1" y="324.0" width="19.2" height="24.0" rx="2" class="cap"/>
+<text x="1041.7" y="385.0" class="port" text-anchor="middle">100 nF</text>
+</g>
+<g data-o="Slider 2" data-n="gnd">
+<polyline points="993.7,651.0 993.7,664.8 1001.3,664.8 1001.3,680.4" class="halo"/>
+<polyline points="993.7,651.0 993.7,664.8 1001.3,664.8 1001.3,680.4" class="w w-gnd"/>
+<circle cx="993.7" cy="651.0" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="Slider 3" data-n="3v3">
+<polyline points="822.7,291.0 822.7,283.2" class="halo"/>
+<polyline points="822.7,291.0 822.7,283.2" class="w w-pwr"/>
+<circle cx="822.7" cy="283.2" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="Slider 3" data-n="pot3">
+<polyline points="837.7,291.0 882.7,291.0 882.7,315.0" class="halo"/>
+<polyline points="837.7,291.0 882.7,291.0 882.7,315.0" class="w w-pot"/>
+<circle cx="882.7" cy="315.0" r="3.4" class="joint j-pot"/>
+</g>
+<g data-o="Slider 3" data-n="gnd">
+<polyline points="882.7,357.0 882.7,369.0 900.7,369.0 900.7,276.0" class="halo"/>
+<polyline points="882.7,357.0 882.7,369.0 900.7,369.0 900.7,276.0" class="w w-gnd"/>
+<circle cx="882.7" cy="357.0" r="3.4" class="joint j-gnd"/>
+<circle cx="900.7" cy="276.0" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="Slider 3" data-n="pot3 gnd">
+<polyline points="882.7,315.0 882.7,324.0" class="w w-pot"/>
+<polyline points="882.7,348.0 882.7,357.0" class="w w-gnd"/>
+<rect x="873.1" y="324.0" width="19.2" height="24.0" rx="2" class="cap"/>
+<text x="885.7" y="385.0" class="port" text-anchor="middle">100 nF</text>
+</g>
+<g data-o="Slider 3" data-n="gnd">
+<polyline points="837.7,651.0 837.7,664.8 845.3,664.8 845.3,680.4" class="halo"/>
+<polyline points="837.7,651.0 837.7,664.8 845.3,664.8 845.3,680.4" class="w w-gnd"/>
+<circle cx="837.7" cy="651.0" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S1" data-n="gnd">
+<polyline points="1157.3,680.4 1157.3,850.8" class="halo"/>
+<polyline points="1157.3,680.4 1157.3,850.8" class="w w-gnd"/>
+<circle cx="1157.3" cy="850.8" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S1" data-n="3v3">
+<polyline points="1172.6,680.4 1172.6,841.2" class="halo"/>
+<polyline points="1172.6,680.4 1172.6,841.2" class="w w-pwr"/>
+<circle cx="1172.6" cy="841.2" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="S2" data-n="gnd">
+<polyline points="1001.3,680.4 1001.3,850.8" class="halo"/>
+<polyline points="1001.3,680.4 1001.3,850.8" class="w w-gnd"/>
+<circle cx="1001.3" cy="850.8" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S2" data-n="3v3">
+<polyline points="1016.6,680.4 1016.6,841.2" class="halo"/>
+<polyline points="1016.6,680.4 1016.6,841.2" class="w w-pwr"/>
+<circle cx="1016.6" cy="841.2" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="S3" data-n="gnd">
+<polyline points="845.3,680.4 845.3,850.8" class="halo"/>
+<polyline points="845.3,680.4 845.3,850.8" class="w w-gnd"/>
+<circle cx="845.3" cy="850.8" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S3" data-n="3v3">
+<polyline points="860.6,680.4 860.6,841.2" class="halo"/>
+<polyline points="860.6,680.4 860.6,841.2" class="w w-pwr"/>
+<circle cx="860.6" cy="841.2" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="S4" data-n="gnd">
+<polyline points="301.1,680.4 301.1,850.8" class="halo"/>
+<polyline points="301.1,680.4 301.1,850.8" class="w w-gnd"/>
+<circle cx="301.1" cy="850.8" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S4" data-n="3v3">
+<polyline points="316.4,680.4 316.4,841.2" class="halo"/>
+<polyline points="316.4,680.4 316.4,841.2" class="w w-pwr"/>
+<circle cx="316.4" cy="841.2" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="S5" data-n="gnd">
+<polyline points="301.1,412.8 301.1,424.8 371.2,424.8 371.2,850.8" class="halo"/>
+<polyline points="301.1,412.8 301.1,424.8 371.2,424.8 371.2,850.8" class="w w-gnd"/>
+<circle cx="371.2" cy="850.8" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S5" data-n="3v3">
+<polyline points="316.4,412.8 316.4,418.8 376.0,418.8 376.0,841.2" class="halo"/>
+<polyline points="316.4,412.8 316.4,418.8 376.0,418.8 376.0,841.2" class="w w-pwr"/>
+<circle cx="376.0" cy="841.2" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="K1" data-n="row0">
+<circle cx="676.4" cy="324.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K1" data-n="col0">
+<circle cx="714.5" cy="340.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K2" data-n="row0">
+<circle cx="550.4" cy="324.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K2" data-n="col1">
+<circle cx="588.5" cy="340.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K3" data-n="row0">
+<circle cx="424.4" cy="324.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K3" data-n="col2">
+<circle cx="462.5" cy="340.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K4" data-n="row1">
+<circle cx="676.4" cy="450.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K4" data-n="col0">
+<circle cx="714.5" cy="466.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K5" data-n="row1">
+<circle cx="550.4" cy="450.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K5" data-n="col1">
+<circle cx="588.5" cy="466.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K6" data-n="row1">
+<circle cx="424.4" cy="450.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K6" data-n="col2">
+<circle cx="462.5" cy="466.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K7" data-n="row2">
+<circle cx="676.4" cy="576.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K7" data-n="col0">
+<circle cx="714.5" cy="592.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K8" data-n="row2">
+<circle cx="550.4" cy="576.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K8" data-n="col1">
+<circle cx="588.5" cy="592.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K9" data-n="row2">
+<circle cx="424.4" cy="576.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K9" data-n="col2">
+<circle cx="462.5" cy="592.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K10" data-n="row3">
+<circle cx="676.4" cy="702.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K10" data-n="col0">
+<circle cx="714.5" cy="718.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K11" data-n="row3">
+<circle cx="550.4" cy="702.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K11" data-n="col1">
+<circle cx="588.5" cy="718.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="K12" data-n="row3">
+<circle cx="424.4" cy="702.7" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="K12" data-n="col2">
+<circle cx="462.5" cy="718.0" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="E1" data-n="row2">
+<circle cx="308.5" cy="573.6" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="E1" data-n="col3">
+<circle cx="278.5" cy="573.6" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="E2" data-n="row0">
+<circle cx="308.5" cy="313.2" r="3.4" class="joint j-row"/>
+</g>
+<g data-o="E2" data-n="col3">
+<circle cx="278.5" cy="313.2" r="3.4" class="joint j-col"/>
+</g>
+<g data-o="E1" data-n="body">
+<text x="278.5" y="649.6" class="pinlbl" text-anchor="middle">B</text>
+<text x="293.5" y="649.6" class="pinlbl" text-anchor="middle">C</text>
+<text x="308.5" y="649.6" class="pinlbl" text-anchor="middle">A</text>
+</g>
+<g data-o="E1" data-n="gnd">
+<circle cx="293.5" cy="657.6" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="E1" data-n="e1b">
+<circle cx="278.5" cy="657.6" r="3.4" class="joint j-enc"/>
+</g>
+<g data-o="E1" data-n="e1a">
+<circle cx="308.5" cy="657.6" r="3.4" class="joint j-enc"/>
+</g>
+<g data-o="E2" data-n="body">
+<text x="278.5" y="389.2" class="pinlbl" text-anchor="middle">B</text>
+<text x="293.5" y="389.2" class="pinlbl" text-anchor="middle">C</text>
+<text x="308.5" y="389.2" class="pinlbl" text-anchor="middle">A</text>
+</g>
+<g data-o="E2" data-n="gnd">
+<circle cx="293.5" cy="397.2" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="E2" data-n="e2b">
+<circle cx="278.5" cy="397.2" r="3.4" class="joint j-enc"/>
+</g>
+<g data-o="E2" data-n="e2a">
+<circle cx="308.5" cy="397.2" r="3.4" class="joint j-enc"/>
+</g>
+<g data-o="Slider 1" data-n="body">
+<text x="1134.7" y="307.0" class="pinlbl" text-anchor="middle">1</text>
+<text x="1149.7" y="307.0" class="pinlbl" text-anchor="middle">2</text>
+</g>
+<g data-o="Slider 1" data-n="3v3">
+<circle cx="1134.7" cy="291.0" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="Slider 1" data-n="pot1">
+<circle cx="1149.7" cy="291.0" r="3.4" class="joint j-pot"/>
+</g>
+<g data-o="Slider 1" data-n="body">
+<text x="1137.7" y="655.0" class="pinlbl" text-anchor="end">3</text>
+</g>
+<g data-o="Slider 2" data-n="body">
+<text x="978.7" y="307.0" class="pinlbl" text-anchor="middle">1</text>
+<text x="993.7" y="307.0" class="pinlbl" text-anchor="middle">2</text>
+</g>
+<g data-o="Slider 2" data-n="3v3">
+<circle cx="978.7" cy="291.0" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="Slider 2" data-n="pot2">
+<circle cx="993.7" cy="291.0" r="3.4" class="joint j-pot"/>
+</g>
+<g data-o="Slider 2" data-n="body">
+<text x="981.7" y="655.0" class="pinlbl" text-anchor="end">3</text>
+</g>
+<g data-o="Slider 3" data-n="body">
+<text x="822.7" y="307.0" class="pinlbl" text-anchor="middle">1</text>
+<text x="837.7" y="307.0" class="pinlbl" text-anchor="middle">2</text>
+</g>
+<g data-o="Slider 3" data-n="3v3">
+<circle cx="822.7" cy="291.0" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="Slider 3" data-n="pot3">
+<circle cx="837.7" cy="291.0" r="3.4" class="joint j-pot"/>
+</g>
+<g data-o="Slider 3" data-n="body">
+<text x="825.7" y="655.0" class="pinlbl" text-anchor="end">3</text>
+</g>
+<g data-o="S1" data-n="sd0">
+<text x="1126.8" y="696.4" class="pinmini" text-anchor="middle">SDA</text>
+<circle cx="1126.8" cy="680.4" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S1" data-n="sc0">
+<text x="1142.1" y="696.4" class="pinmini" text-anchor="middle">SCL</text>
+<circle cx="1142.1" cy="680.4" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S1" data-n="gnd">
+<text x="1157.3" y="696.4" class="pinmini" text-anchor="middle">GND</text>
+<circle cx="1157.3" cy="680.4" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S1" data-n="3v3">
+<text x="1172.6" y="696.4" class="pinmini" text-anchor="middle">VCC</text>
+<circle cx="1172.6" cy="680.4" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="S2" data-n="sd1">
+<text x="970.8" y="696.4" class="pinmini" text-anchor="middle">SDA</text>
+<circle cx="970.8" cy="680.4" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S2" data-n="sc1">
+<text x="986.1" y="696.4" class="pinmini" text-anchor="middle">SCL</text>
+<circle cx="986.1" cy="680.4" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S2" data-n="gnd">
+<text x="1001.3" y="696.4" class="pinmini" text-anchor="middle">GND</text>
+<circle cx="1001.3" cy="680.4" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S2" data-n="3v3">
+<text x="1016.6" y="696.4" class="pinmini" text-anchor="middle">VCC</text>
+<circle cx="1016.6" cy="680.4" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="S3" data-n="sd2">
+<text x="814.8" y="696.4" class="pinmini" text-anchor="middle">SDA</text>
+<circle cx="814.8" cy="680.4" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S3" data-n="sc2">
+<text x="830.1" y="696.4" class="pinmini" text-anchor="middle">SCL</text>
+<circle cx="830.1" cy="680.4" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S3" data-n="gnd">
+<text x="845.3" y="696.4" class="pinmini" text-anchor="middle">GND</text>
+<circle cx="845.3" cy="680.4" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S3" data-n="3v3">
+<text x="860.6" y="696.4" class="pinmini" text-anchor="middle">VCC</text>
+<circle cx="860.6" cy="680.4" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="S4" data-n="sd3">
+<text x="270.6" y="696.4" class="pinmini" text-anchor="middle">SDA</text>
+<circle cx="270.6" cy="680.4" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S4" data-n="sc3">
+<text x="285.9" y="696.4" class="pinmini" text-anchor="middle">SCL</text>
+<circle cx="285.9" cy="680.4" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S4" data-n="gnd">
+<text x="301.1" y="696.4" class="pinmini" text-anchor="middle">GND</text>
+<circle cx="301.1" cy="680.4" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S4" data-n="3v3">
+<text x="316.4" y="696.4" class="pinmini" text-anchor="middle">VCC</text>
+<circle cx="316.4" cy="680.4" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="S5" data-n="sd4">
+<text x="270.6" y="428.8" class="pinmini" text-anchor="middle">SDA</text>
+<circle cx="270.6" cy="412.8" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S5" data-n="sc4">
+<text x="285.9" y="428.8" class="pinmini" text-anchor="middle">SCL</text>
+<circle cx="285.9" cy="412.8" r="3.4" class="joint j-scr"/>
+</g>
+<g data-o="S5" data-n="gnd">
+<text x="301.1" y="428.8" class="pinmini" text-anchor="middle">GND</text>
+<circle cx="301.1" cy="412.8" r="3.4" class="joint j-gnd"/>
+</g>
+<g data-o="S5" data-n="3v3">
+<text x="316.4" y="428.8" class="pinmini" text-anchor="middle">VCC</text>
+<circle cx="316.4" cy="412.8" r="3.4" class="joint j-pwr"/>
+</g>
+<g data-o="bus" data-n="row0" data-w="1">
+<polyline points="701.3,298.2 732.5,298.2 732.5,210.0 732.5,144.0 850.6,144.0 850.6,-6.0 850.6,-186.0 850.6,-373.8 771.3,-373.8" class="halo"/>
+<polyline points="701.3,298.2 732.5,298.2 732.5,210.0 732.5,144.0 850.6,144.0 850.6,-6.0 850.6,-186.0 850.6,-373.8 771.3,-373.8" class="w w-row"/>
+<circle cx="767.3" cy="-373.8" r="3.4" class="joint j-row"/>
+<text x="853.6" y="-96.0" class="lanenum tt-row" text-anchor="middle" transform="rotate(-90 853.6 -96.0)">1</text>
+</g>
+<g data-o="bus" data-n="row1" data-w="2">
+<polyline points="701.3,412.2 737.9,412.2 737.9,210.0 737.9,137.0 839.8,137.0 839.8,-6.0 839.8,-186.0 839.8,-358.6 771.3,-358.6" class="halo"/>
+<polyline points="701.3,412.2 737.9,412.2 737.9,210.0 737.9,137.0 839.8,137.0 839.8,-6.0 839.8,-186.0 839.8,-358.6 771.3,-358.6" class="w w-row"/>
+<circle cx="767.3" cy="-358.6" r="3.4" class="joint j-row"/>
+<text x="842.8" y="-96.0" class="lanenum tt-row" text-anchor="middle" transform="rotate(-90 842.8 -96.0)">2</text>
+</g>
+<g data-o="bus" data-n="row2" data-w="3">
+<polyline points="701.3,550.2 743.3,550.2 743.3,210.0 743.3,186.0 829.0,186.0 829.0,-6.0 829.0,-186.0 829.0,-343.3 771.3,-343.3" class="halo"/>
+<polyline points="701.3,550.2 743.3,550.2 743.3,210.0 743.3,186.0 829.0,186.0 829.0,-6.0 829.0,-186.0 829.0,-343.3 771.3,-343.3" class="w w-row"/>
+<circle cx="767.3" cy="-343.3" r="3.4" class="joint j-row"/>
+<text x="832.0" y="-96.0" class="lanenum tt-row" text-anchor="middle" transform="rotate(-90 832.0 -96.0)">3</text>
+</g>
+<g data-o="bus" data-n="row3" data-w="4">
+<polyline points="701.3,676.2 748.7,676.2 748.7,210.0 748.7,25.0 646.6,25.0 646.6,-6.0 646.6,-186.0 646.6,-251.9 671.9,-251.9" class="halo"/>
+<polyline points="701.3,676.2 748.7,676.2 748.7,210.0 748.7,25.0 646.6,25.0 646.6,-6.0 646.6,-186.0 646.6,-251.9 671.9,-251.9" class="w w-row"/>
+<circle cx="675.9" cy="-251.9" r="3.4" class="joint j-row"/>
+<text x="649.6" y="-96.0" class="lanenum tt-row" text-anchor="middle" transform="rotate(-90 649.6 -96.0)">4</text>
+</g>
+<g data-o="bus" data-n="col0" data-w="5">
+<polyline points="714.5,340.0 714.5,210.0 714.5,116.0 818.2,116.0 818.2,-6.0 818.2,-186.0 818.2,-328.1 771.3,-328.1" class="halo"/>
+<polyline points="714.5,340.0 714.5,210.0 714.5,116.0 818.2,116.0 818.2,-6.0 818.2,-186.0 818.2,-328.1 771.3,-328.1" class="w w-col"/>
+<circle cx="767.3" cy="-328.1" r="3.4" class="joint j-col"/>
+<text x="821.2" y="-96.0" class="lanenum tt-col" text-anchor="middle" transform="rotate(-90 821.2 -96.0)">5</text>
+</g>
+<g data-o="bus" data-n="col1" data-w="6">
+<polyline points="588.5,340.0 588.5,210.0 588.5,158.0 635.8,158.0 635.8,-6.0 635.8,-186.0 635.8,-282.4 671.9,-282.4" class="halo"/>
+<polyline points="588.5,340.0 588.5,210.0 588.5,158.0 635.8,158.0 635.8,-6.0 635.8,-186.0 635.8,-282.4 671.9,-282.4" class="w w-col"/>
+<circle cx="675.9" cy="-282.4" r="3.4" class="joint j-col"/>
+<text x="638.8" y="-96.0" class="lanenum tt-col" text-anchor="middle" transform="rotate(-90 638.8 -96.0)">6</text>
+</g>
+<g data-o="bus" data-n="col2" data-w="7">
+<polyline points="462.5,340.0 462.5,210.0 462.5,39.0 614.2,39.0 614.2,-6.0 614.2,-186.0 614.2,-358.6 671.9,-358.6" class="halo"/>
+<polyline points="462.5,340.0 462.5,210.0 462.5,39.0 614.2,39.0 614.2,-6.0 614.2,-186.0 614.2,-358.6 671.9,-358.6" class="w w-col"/>
+<circle cx="675.9" cy="-358.6" r="3.4" class="joint j-col"/>
+<text x="617.2" y="-96.0" class="lanenum tt-col" text-anchor="middle" transform="rotate(-90 617.2 -96.0)">7</text>
+</g>
+<g data-o="bus" data-n="col3" data-w="8">
+<polyline points="215.2,313.2 176.0,313.2 176.0,210.0 176.0,179.0 807.4,179.0 807.4,-6.0 807.4,-186.0 807.4,-312.8 771.3,-312.8" class="halo"/>
+<polyline points="215.2,313.2 176.0,313.2 176.0,210.0 176.0,179.0 807.4,179.0 807.4,-6.0 807.4,-186.0 807.4,-312.8 771.3,-312.8" class="w w-col"/>
+<circle cx="767.3" cy="-312.8" r="3.4" class="joint j-col"/>
+<text x="810.4" y="-96.0" class="lanenum tt-col" text-anchor="middle" transform="rotate(-90 810.4 -96.0)">8</text>
+</g>
+<g data-o="bus" data-n="gnd" data-w="9">
+<polyline points="779.2,276.0 779.2,210.0 779.2,109.0 571.0,109.0 571.0,-6.0 571.0,-186.0 571.0,-495.7 671.9,-495.7" class="halo"/>
+<polyline points="779.2,276.0 779.2,210.0 779.2,109.0 571.0,109.0 571.0,-6.0 571.0,-186.0 571.0,-495.7 671.9,-495.7" class="w w-gnd"/>
+<circle cx="675.9" cy="-495.7" r="3.4" class="joint j-gnd"/>
+<text x="574.0" y="-96.0" class="lanenum tt-gnd" text-anchor="middle" transform="rotate(-90 574.0 -96.0)">9</text>
+</g>
+<g data-o="bus" data-n="3v3" data-w="10">
+<polyline points="770.2,283.2 770.2,210.0 770.2,151.0 560.2,151.0 560.2,-6.0 560.2,-186.0 560.2,-511.0 671.9,-511.0" class="halo"/>
+<polyline points="770.2,283.2 770.2,210.0 770.2,151.0 560.2,151.0 560.2,-6.0 560.2,-186.0 560.2,-511.0 671.9,-511.0" class="w w-pwr"/>
+<circle cx="675.9" cy="-511.0" r="3.4" class="joint j-pwr"/>
+<text x="563.2" y="-96.0" class="lanenum tt-pwr" text-anchor="middle" transform="rotate(-90 563.2 -96.0)">10</text>
+</g>
+<g data-o="E1" data-n="e1a" data-w="11">
+<polyline points="308.5,657.6 308.5,654.6 136.0,654.6 136.0,210.0 136.0,130.0 796.6,130.0 796.6,-6.0 796.6,-186.0 796.6,-297.6 771.3,-297.6" class="halo"/>
+<polyline points="308.5,657.6 308.5,654.6 136.0,654.6 136.0,210.0 136.0,130.0 796.6,130.0 796.6,-6.0 796.6,-186.0 796.6,-297.6 771.3,-297.6" class="w w-enc"/>
+<circle cx="767.3" cy="-297.6" r="3.4" class="joint j-enc"/>
+<text x="799.6" y="-96.0" class="lanenum tt-enc" text-anchor="middle" transform="rotate(-90 799.6 -96.0)">11</text>
+</g>
+<g data-o="E1" data-n="e1b" data-w="12">
+<polyline points="278.5,657.6 278.5,657.6 128.0,657.6 128.0,210.0 128.0,123.0 592.6,123.0 592.6,-6.0 592.6,-186.0 592.6,-450.0 671.9,-450.0" class="halo"/>
+<polyline points="278.5,657.6 278.5,657.6 128.0,657.6 128.0,210.0 128.0,123.0 592.6,123.0 592.6,-6.0 592.6,-186.0 592.6,-450.0 671.9,-450.0" class="w w-enc"/>
+<circle cx="675.9" cy="-450.0" r="3.4" class="joint j-enc"/>
+<text x="595.6" y="-96.0" class="lanenum tt-enc" text-anchor="middle" transform="rotate(-90 595.6 -96.0)">12</text>
+</g>
+<g data-o="E2" data-n="e2a" data-w="13">
+<polyline points="308.5,397.2 308.5,394.2 168.0,394.2 168.0,210.0 168.0,172.0 581.8,172.0 581.8,-6.0 581.8,-186.0 581.8,-465.2 671.9,-465.2" class="halo"/>
+<polyline points="308.5,397.2 308.5,394.2 168.0,394.2 168.0,210.0 168.0,172.0 581.8,172.0 581.8,-6.0 581.8,-186.0 581.8,-465.2 671.9,-465.2" class="w w-enc"/>
+<circle cx="675.9" cy="-465.2" r="3.4" class="joint j-enc"/>
+<text x="584.8" y="-96.0" class="lanenum tt-enc" text-anchor="middle" transform="rotate(-90 584.8 -96.0)">13</text>
+</g>
+<g data-o="E2" data-n="e2b" data-w="14">
+<polyline points="278.5,397.2 278.5,397.2 160.0,397.2 160.0,210.0 160.0,200.0 893.8,200.0 893.8,-6.0 893.8,-186.0 893.8,-434.8 771.3,-434.8" class="halo"/>
+<polyline points="278.5,397.2 278.5,397.2 160.0,397.2 160.0,210.0 160.0,200.0 893.8,200.0 893.8,-6.0 893.8,-186.0 893.8,-434.8 771.3,-434.8" class="w w-enc"/>
+<circle cx="767.3" cy="-434.8" r="3.4" class="joint j-enc"/>
+<text x="896.8" y="-96.0" class="lanenum tt-enc" text-anchor="middle" transform="rotate(-90 896.8 -96.0)">14</text>
+</g>
+<g data-o="Slider 1" data-n="pot1" data-w="15">
+<polyline points="1149.7,291.0 1149.7,210.0 1149.7,32.0 883.0,32.0 883.0,-6.0 883.0,-186.0 883.0,-419.5 771.3,-419.5" class="halo"/>
+<polyline points="1149.7,291.0 1149.7,210.0 1149.7,32.0 883.0,32.0 883.0,-6.0 883.0,-186.0 883.0,-419.5 771.3,-419.5" class="w w-pot"/>
+<circle cx="767.3" cy="-419.5" r="3.4" class="joint j-pot"/>
+<text x="886.0" y="-96.0" class="lanenum tt-pot" text-anchor="middle" transform="rotate(-90 886.0 -96.0)">15</text>
+</g>
+<g data-o="Slider 2" data-n="pot2" data-w="16">
+<polyline points="993.7,291.0 993.7,210.0 993.7,46.0 872.2,46.0 872.2,-6.0 872.2,-186.0 872.2,-404.3 771.3,-404.3" class="halo"/>
+<polyline points="993.7,291.0 993.7,210.0 993.7,46.0 872.2,46.0 872.2,-6.0 872.2,-186.0 872.2,-404.3 771.3,-404.3" class="w w-pot"/>
+<circle cx="767.3" cy="-404.3" r="3.4" class="joint j-pot"/>
+<text x="875.2" y="-96.0" class="lanenum tt-pot" text-anchor="middle" transform="rotate(-90 875.2 -96.0)">16</text>
+</g>
+<g data-o="Slider 3" data-n="pot3" data-w="17">
+<polyline points="837.7,291.0 837.7,210.0 837.7,193.0 861.4,193.0 861.4,-6.0 861.4,-186.0 861.4,-389.0 771.3,-389.0" class="halo"/>
+<polyline points="837.7,291.0 837.7,210.0 837.7,193.0 861.4,193.0 861.4,-6.0 861.4,-186.0 861.4,-389.0 771.3,-389.0" class="w w-pot"/>
+<circle cx="767.3" cy="-389.0" r="3.4" class="joint j-pot"/>
+<text x="864.4" y="-96.0" class="lanenum tt-pot" text-anchor="middle" transform="rotate(-90 864.4 -96.0)">17</text>
+</g>
+<g data-o="S1" data-n="sd0" data-w="18">
+<polyline points="1126.8,680.4 1126.8,675.0 1107.7,675.0 1107.7,210.0 1107.7,60.0 520.0,60.0 520.0,-6.0 520.0,-186.0 520.0,-300.0" class="halo"/>
+<polyline points="1126.8,680.4 1126.8,675.0 1107.7,675.0 1107.7,210.0 1107.7,60.0 520.0,60.0 520.0,-6.0 520.0,-186.0 520.0,-300.0" class="w w-scr"/>
+<circle cx="520.0" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="523.0" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 523.0 -96.0)">18</text>
+</g>
+<g data-o="S1" data-n="sc0" data-w="19">
+<polyline points="1142.1,680.4 1142.1,670.2 1113.7,670.2 1113.7,210.0 1113.7,53.0 504.8,53.0 504.8,-6.0 504.8,-186.0 504.8,-300.0" class="halo"/>
+<polyline points="1142.1,680.4 1142.1,670.2 1113.7,670.2 1113.7,210.0 1113.7,53.0 504.8,53.0 504.8,-6.0 504.8,-186.0 504.8,-300.0" class="w w-scr"/>
+<circle cx="504.8" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="507.8" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 507.8 -96.0)">19</text>
+</g>
+<g data-o="S2" data-n="sd1" data-w="20">
+<polyline points="970.8,680.4 970.8,675.0 951.7,675.0 951.7,210.0 951.7,67.0 489.5,67.0 489.5,-6.0 489.5,-186.0 489.5,-300.0" class="halo"/>
+<polyline points="970.8,680.4 970.8,675.0 951.7,675.0 951.7,210.0 951.7,67.0 489.5,67.0 489.5,-6.0 489.5,-186.0 489.5,-300.0" class="w w-scr"/>
+<circle cx="489.5" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="492.5" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 492.5 -96.0)">20</text>
+</g>
+<g data-o="S2" data-n="sc1" data-w="21">
+<polyline points="986.1,680.4 986.1,670.2 957.7,670.2 957.7,210.0 957.7,74.0 474.3,74.0 474.3,-6.0 474.3,-186.0 474.3,-300.0" class="halo"/>
+<polyline points="986.1,680.4 986.1,670.2 957.7,670.2 957.7,210.0 957.7,74.0 474.3,74.0 474.3,-6.0 474.3,-186.0 474.3,-300.0" class="w w-scr"/>
+<circle cx="474.3" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="477.3" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 477.3 -96.0)">21</text>
+</g>
+<g data-o="S3" data-n="sd2" data-w="22">
+<polyline points="814.8,680.4 814.8,675.0 795.7,675.0 795.7,210.0 795.7,88.0 459.0,88.0 459.0,-6.0 459.0,-186.0 459.0,-300.0" class="halo"/>
+<polyline points="814.8,680.4 814.8,675.0 795.7,675.0 795.7,210.0 795.7,88.0 459.0,88.0 459.0,-6.0 459.0,-186.0 459.0,-300.0" class="w w-scr"/>
+<circle cx="459.0" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="462.0" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 462.0 -96.0)">22</text>
+</g>
+<g data-o="S3" data-n="sc2" data-w="23">
+<polyline points="830.1,680.4 830.1,670.2 801.7,670.2 801.7,210.0 801.7,81.0 443.8,81.0 443.8,-6.0 443.8,-186.0 443.8,-300.0" class="halo"/>
+<polyline points="830.1,680.4 830.1,670.2 801.7,670.2 801.7,210.0 801.7,81.0 443.8,81.0 443.8,-6.0 443.8,-186.0 443.8,-300.0" class="w w-scr"/>
+<circle cx="443.8" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="446.8" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 446.8 -96.0)">23</text>
+</g>
+<g data-o="S4" data-n="sd3" data-w="24">
+<polyline points="270.6,680.4 270.6,676.2 112.0,676.2 112.0,210.0 112.0,95.0 428.6,95.0 428.6,-6.0 428.6,-186.0 428.6,-300.0" class="halo"/>
+<polyline points="270.6,680.4 270.6,676.2 112.0,676.2 112.0,210.0 112.0,95.0 428.6,95.0 428.6,-6.0 428.6,-186.0 428.6,-300.0" class="w w-scr"/>
+<circle cx="428.6" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="431.6" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 431.6 -96.0)">24</text>
+</g>
+<g data-o="S4" data-n="sc3" data-w="25">
+<polyline points="285.9,680.4 285.9,672.6 120.0,672.6 120.0,210.0 120.0,102.0 413.3,102.0 413.3,-6.0 413.3,-186.0 413.3,-300.0" class="halo"/>
+<polyline points="285.9,680.4 285.9,672.6 120.0,672.6 120.0,210.0 120.0,102.0 413.3,102.0 413.3,-6.0 413.3,-186.0 413.3,-300.0" class="w w-scr"/>
+<circle cx="413.3" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="416.3" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 416.3 -96.0)">25</text>
+</g>
+<g data-o="S5" data-n="sd4" data-w="26">
+<polyline points="270.6,412.8 270.6,418.8 152.0,418.8 152.0,210.0 152.0,165.0 398.1,165.0 398.1,-6.0 398.1,-186.0 398.1,-300.0" class="halo"/>
+<polyline points="270.6,412.8 270.6,418.8 152.0,418.8 152.0,210.0 152.0,165.0 398.1,165.0 398.1,-6.0 398.1,-186.0 398.1,-300.0" class="w w-scr"/>
+<circle cx="398.1" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="401.1" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 401.1 -96.0)">26</text>
+</g>
+<g data-o="S5" data-n="sc4" data-w="27">
+<polyline points="285.9,412.8 285.9,424.8 144.0,424.8 144.0,210.0 144.0,18.0 382.8,18.0 382.8,-6.0 382.8,-186.0 382.8,-300.0" class="halo"/>
+<polyline points="285.9,412.8 285.9,424.8 144.0,424.8 144.0,210.0 144.0,18.0 382.8,18.0 382.8,-6.0 382.8,-186.0 382.8,-300.0" class="w w-scr"/>
+<circle cx="382.8" cy="-300.0" r="3.4" class="joint j-scr"/>
+<text x="385.8" y="-96.0" class="lanenum tt-scr" text-anchor="middle" transform="rotate(-90 385.8 -96.0)">27</text>
+</g>
+<text x="845.2" y="-164.0" class="plugname" text-anchor="middle">A</text>
+<text x="641.2" y="-164.0" class="plugname" text-anchor="middle">D</text>
+<text x="614.2" y="-164.0" class="plugname" text-anchor="middle">E</text>
+<text x="576.4" y="-164.0" class="plugname" text-anchor="middle">C</text>
+<text x="451.4" y="-164.0" class="plugname" text-anchor="middle">B</text>
+</svg>
+      </div>
+      <figcaption><strong>Thin wires that cross without a dot don't touch</strong>: they're insulated. Bare copper only crosses bare copper under a sleeve (grey block). Dots are solder joints. The plate is seen from below, so K1 is at the top right, the sliders on the right and the knob column on the left; the lid lies turned round, USB-C toward the fold. Both halves are to the same scale and line up: a point in the lid sits over the plate point straight below it when the case is closed. Check the pin numbers printed on your sliders and screens: the drawing shows them from the back.</figcaption>
+    </figure>
+  </section>
+
+  <section class="wide">
+    <div class="section-head">
+      <span class="eyebrow">Harness</span>
+      <h2>The 27 wires between plate and lid</h2>
+      <p>One row per wire, in number order. Hover a row to see that wire in the drawing; click it to keep it picked. Tick each one off once its plate end is soldered and its plug is on its pin.</p>
+    </div>
+    <div class="check-bar">
+      <span class="progress" id="hprogress" aria-live="polite"></span>
+      <button type="button" id="hclear">Clear ticks</button>
+    </div>
+    <div class="hsplit">
+    <div class="tablewrap">
+      <table class="harness" id="harness">
+        <thead><tr><th scope="col">Wire</th><th scope="col">On the plate</th><th scope="col">In the lid</th><th scope="col">Done</th></tr></thead>
+        <tbody>
+<tr class="grouprow"><th colspan="4">Between plate and lid</th></tr>
+<tr data-w="1" data-o="bus" data-n="row0" tabindex="0"><td><span class="numbadge nb-row">1</span></td><td>Row 0 bus, its end by column 0</td><td class="to">A4 · plug A</td><td><input type="checkbox" aria-label="Wire 1 done" data-done="1"></td></tr>
+<tr data-w="2" data-o="bus" data-n="row1" tabindex="0"><td><span class="numbadge nb-row">2</span></td><td>Row 1 bus, its end by column 0</td><td class="to">A5 · plug A</td><td><input type="checkbox" aria-label="Wire 2 done" data-done="2"></td></tr>
+<tr data-w="3" data-o="bus" data-n="row2" tabindex="0"><td><span class="numbadge nb-row">3</span></td><td>Row 2 bus, its end by column 0</td><td class="to">A6 · plug A</td><td><input type="checkbox" aria-label="Wire 3 done" data-done="3"></td></tr>
+<tr data-w="4" data-o="bus" data-n="row3" tabindex="0"><td><span class="numbadge nb-row">4</span></td><td>Row 3 bus, its end by column 0</td><td class="to">B14 · plug D</td><td><input type="checkbox" aria-label="Wire 4 done" data-done="4"></td></tr>
+<tr data-w="5" data-o="bus" data-n="col0" tabindex="0"><td><span class="numbadge nb-col">5</span></td><td>Column 0 bus, its back end</td><td class="to">A7 · plug A</td><td><input type="checkbox" aria-label="Wire 5 done" data-done="5"></td></tr>
+<tr data-w="6" data-o="bus" data-n="col1" tabindex="0"><td><span class="numbadge nb-col">6</span></td><td>Column 1 bus, its back end</td><td class="to">A8 · plug D</td><td><input type="checkbox" aria-label="Wire 6 done" data-done="6"></td></tr>
+<tr data-w="7" data-o="bus" data-n="col2" tabindex="0"><td><span class="numbadge nb-col">7</span></td><td>Column 2 bus, its back end</td><td class="to">A15 · plug E</td><td><input type="checkbox" aria-label="Wire 7 done" data-done="7"></td></tr>
+<tr data-w="8" data-o="bus" data-n="col3" tabindex="0"><td><span class="numbadge nb-col">8</span></td><td>Column 3 wire (knob pushes), at the wall by E2</td><td class="to">B0 · plug A</td><td><input type="checkbox" aria-label="Wire 8 done" data-done="8"></td></tr>
+<tr data-w="9" data-o="bus" data-n="gnd" tabindex="0"><td><span class="numbadge nb-gnd">9</span></td><td>GND bus, its back end by slider 3</td><td class="to">G · plug C</td><td><input type="checkbox" aria-label="Wire 9 done" data-done="9"></td></tr>
+<tr data-w="10" data-o="bus" data-n="3v3" tabindex="0"><td><span class="numbadge nb-pwr">10</span></td><td>3V3 bus, its back end by slider 3</td><td class="to">3V3 · plug C</td><td><input type="checkbox" aria-label="Wire 10 done" data-done="10"></td></tr>
+<tr data-w="11" data-o="E1" data-n="e1a" tabindex="0"><td><span class="numbadge nb-enc">11</span></td><td>E1 pin A</td><td class="to">B1 · plug A</td><td><input type="checkbox" aria-label="Wire 11 done" data-done="11"></td></tr>
+<tr data-w="12" data-o="E1" data-n="e1b" tabindex="0"><td><span class="numbadge nb-enc">12</span></td><td>E1 pin B</td><td class="to">B8 · plug C</td><td><input type="checkbox" aria-label="Wire 12 done" data-done="12"></td></tr>
+<tr data-w="13" data-o="E2" data-n="e2a" tabindex="0"><td><span class="numbadge nb-enc">13</span></td><td>E2 pin A</td><td class="to">B9 · plug C</td><td><input type="checkbox" aria-label="Wire 13 done" data-done="13"></td></tr>
+<tr data-w="14" data-o="E2" data-n="e2b" tabindex="0"><td><span class="numbadge nb-enc">14</span></td><td>E2 pin B</td><td class="to">A0 · plug A</td><td><input type="checkbox" aria-label="Wire 14 done" data-done="14"></td></tr>
+<tr data-w="15" data-o="Slider 1" data-n="pot1" tabindex="0"><td><span class="numbadge nb-pot">15</span></td><td>Slider 1 pin 2</td><td class="to">A1 · plug A</td><td><input type="checkbox" aria-label="Wire 15 done" data-done="15"></td></tr>
+<tr data-w="16" data-o="Slider 2" data-n="pot2" tabindex="0"><td><span class="numbadge nb-pot">16</span></td><td>Slider 2 pin 2</td><td class="to">A2 · plug A</td><td><input type="checkbox" aria-label="Wire 16 done" data-done="16"></td></tr>
+<tr data-w="17" data-o="Slider 3" data-n="pot3" tabindex="0"><td><span class="numbadge nb-pot">17</span></td><td>Slider 3 pin 2</td><td class="to">A3 · plug A</td><td><input type="checkbox" aria-label="Wire 17 done" data-done="17"></td></tr>
+<tr data-w="18" data-o="S1" data-n="sd0" tabindex="0"><td><span class="numbadge nb-scr">18</span></td><td>S1 SDA</td><td class="to">mux SD0 · plug B</td><td><input type="checkbox" aria-label="Wire 18 done" data-done="18"></td></tr>
+<tr data-w="19" data-o="S1" data-n="sc0" tabindex="0"><td><span class="numbadge nb-scr">19</span></td><td>S1 SCL</td><td class="to">mux SC0 · plug B</td><td><input type="checkbox" aria-label="Wire 19 done" data-done="19"></td></tr>
+<tr data-w="20" data-o="S2" data-n="sd1" tabindex="0"><td><span class="numbadge nb-scr">20</span></td><td>S2 SDA</td><td class="to">mux SD1 · plug B</td><td><input type="checkbox" aria-label="Wire 20 done" data-done="20"></td></tr>
+<tr data-w="21" data-o="S2" data-n="sc1" tabindex="0"><td><span class="numbadge nb-scr">21</span></td><td>S2 SCL</td><td class="to">mux SC1 · plug B</td><td><input type="checkbox" aria-label="Wire 21 done" data-done="21"></td></tr>
+<tr data-w="22" data-o="S3" data-n="sd2" tabindex="0"><td><span class="numbadge nb-scr">22</span></td><td>S3 SDA</td><td class="to">mux SD2 · plug B</td><td><input type="checkbox" aria-label="Wire 22 done" data-done="22"></td></tr>
+<tr data-w="23" data-o="S3" data-n="sc2" tabindex="0"><td><span class="numbadge nb-scr">23</span></td><td>S3 SCL</td><td class="to">mux SC2 · plug B</td><td><input type="checkbox" aria-label="Wire 23 done" data-done="23"></td></tr>
+<tr data-w="24" data-o="S4" data-n="sd3" tabindex="0"><td><span class="numbadge nb-scr">24</span></td><td>S4 SDA</td><td class="to">mux SD3 · plug B</td><td><input type="checkbox" aria-label="Wire 24 done" data-done="24"></td></tr>
+<tr data-w="25" data-o="S4" data-n="sc3" tabindex="0"><td><span class="numbadge nb-scr">25</span></td><td>S4 SCL</td><td class="to">mux SC3 · plug B</td><td><input type="checkbox" aria-label="Wire 25 done" data-done="25"></td></tr>
+<tr data-w="26" data-o="S5" data-n="sd4" tabindex="0"><td><span class="numbadge nb-scr">26</span></td><td>S5 SDA</td><td class="to">mux SD4 · plug B</td><td><input type="checkbox" aria-label="Wire 26 done" data-done="26"></td></tr>
+<tr data-w="27" data-o="S5" data-n="sc4" tabindex="0"><td><span class="numbadge nb-scr">27</span></td><td>S5 SCL</td><td class="to">mux SC4 · plug B</td><td><input type="checkbox" aria-label="Wire 27 done" data-done="27"></td></tr>
+<tr class="grouprow"><th colspan="4">Inside the lid</th></tr>
+<tr data-w="L1" data-o="MUX" data-n="mux-scl" tabindex="0"><td><span class="numbadge nb-scr">L1</span></td><td>Mux SCL</td><td class="to">B6</td><td><input type="checkbox" aria-label="Wire L1 done" data-done="L1"></td></tr>
+<tr data-w="L2" data-o="MUX" data-n="mux-sda" tabindex="0"><td><span class="numbadge nb-scr">L2</span></td><td>Mux SDA</td><td class="to">B7</td><td><input type="checkbox" aria-label="Wire L2 done" data-done="L2"></td></tr>
+<tr data-w="L3" data-o="MUX" data-n="mux-gnd" tabindex="0"><td><span class="numbadge nb-gnd">L3</span></td><td>Mux GND</td><td class="to">G (right-hand header, USB end)</td><td><input type="checkbox" aria-label="Wire L3 done" data-done="L3"></td></tr>
+<tr data-w="L4" data-o="MUX" data-n="mux-vin" tabindex="0"><td><span class="numbadge nb-pwr">L4</span></td><td>Mux VIN</td><td class="to">3V3 (right-hand header, USB end)</td><td><input type="checkbox" aria-label="Wire L4 done" data-done="L4"></td></tr>
+<tr data-w="L5" data-o="Buttons" data-n="rst" tabindex="0"><td><span class="numbadge nb-rst">L5</span></td><td>B button, both legs</td><td class="to">the board's own BOOT0 button, two legs (solder before the board goes in)</td><td><input type="checkbox" aria-label="Wire L5 done" data-done="L5"></td></tr>
+<tr data-w="L6" data-o="Buttons" data-n="rst" tabindex="0"><td><span class="numbadge nb-rst">L6</span></td><td>R button, both legs</td><td class="to">R and G (right-hand header; G shared with L3)</td><td><input type="checkbox" aria-label="Wire L6 done" data-done="L6"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <aside class="hside" id="hside">
+      <div class="zoombar"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+    </aside>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">How each part connects</span>
+      <h2>Buses, parts and the lid</h2>
+    </div>
+    <div class="notes">
+      <div>
+        <h3>Buses</h3>
+        <p>Bare solid copper, laid first and soldered at every joint: one wire per row and per column across the keys, and a GND and a 3V3 pair twice: across the front, just in front of the screens, and across the slider ends, joined by two insulated wires up the slider-side edge. Bare copper never crosses a circuit board. Where two buses cross, <strong>slide a piece of sleeve or heat-shrink over the upper one</strong>: bare copper on bare copper shorts. Each bus takes one numbered wire to its BlackPill pin.</p>
+      </div>
+      <div>
+        <h3>Keys</h3>
+        <p>The switch pin nearer the front sits on its column bus: solder it straight on. The other pin takes the diode's plain red end; the <strong>black band end goes to the row bus</strong>.</p>
+      </div>
+      <div>
+        <h3>Knobs</h3>
+        <p>Push pins: the one nearer the keys takes a diode to row 0 (E2) or row 2 (E1); the other joins column 3, an insulated wire up the knob-column wall from E1 to E2. C: a short jumper to the GND pin of the knob's own screen. A and B: numbered wires up the wall to the BlackPill, no diode.</p>
+      </div>
+      <div>
+        <h3>Sliders</h3>
+        <p>Pins 1 and 2 are at the back end, pin 3 alone at the front end. Pin 1 to the 3V3 bus across the slider ends; pin 3 by a short jumper to the GND pin of the slider's own screen, just in front of it. Pin 2 is a numbered wire to A1, A2 or A3, with a 100 nF capacitor standing beside the slider body, on its right as you look at it from the back: one leg to pin 2 by a short jumper, the other leg to the GND bus across the slider ends. The capacitor has no polarity.</p>
+      </div>
+      <div>
+        <h3>Screens</h3>
+        <p>4-pin I2C modules (SDA, SCL, GND, VCC, left to right from the back), all at the same address. VCC and GND by jumpers down to the front pair; S5's run down the gap between the keys and the knob column. SDA and SCL are a numbered pair to the screen's channel on the multiplexer: S1 on SD0 and SC0, up to S5 on SD4 and SC4. S1 to S3 run up between the sliders, S4 and S5 up the wall.</p>
+      </div>
+      <div>
+        <h3>Lid</h3>
+        <p>BlackPill upside down in its cradle (chips down, USB-C at the back), multiplexer glued right of it seen from above, both with male header pins, long side up, so the numbered wires plug straight on. Solder L5 to the board's own BOOT0 button before the board goes in. Mux VIN to 3V3, GND to G, SDA to B7, SCL to B6; leave A0 to A2 and RST unconnected (address 0x70). Power everything from 3V3 only.</p>
+      </div>
+    </div>
+    <figure class="diode-key">
+      <div class="scroll narrow">
+<svg viewBox="0 0 820 320" role="img" aria-label="A 1N4148 diode standing upright: red glass body with a black band at the top. The plain end at the bottom goes to the switch pin, the black band end at the top goes to the row bus.">
+<line x1="200.0" y1="20.0" x2="200.0" y2="80.0" class="w w-row"/>
+<line x1="200.0" y1="240.0" x2="200.0" y2="300.0" class="w w-plain"/>
+<rect x="178" y="80" width="44" height="160" rx="8" class="diode"/>
+<rect x="178" y="80" width="44" height="48" rx="8" class="band"/>
+<rect x="178" y="104" width="44" height="24" class="band"/>
+<rect x="178" y="80" width="44" height="160" rx="8" class="diode-edge"/>
+<text x="240.0" y="108.0" class="note" text-anchor="start">black band</text>
+<text x="240.0" y="190.0" class="note" text-anchor="start">red glass body</text>
+<text x="240.0" y="34.0" class="note" text-anchor="start">band end → row bus</text>
+<text x="240.0" y="294.0" class="note" text-anchor="start">plain end → switch pin</text>
+<text x="470.0" y="140.0" class="note" text-anchor="start">Current flows switch → row,</text>
+<text x="470.0" y="158.0" class="note" text-anchor="start">so the black band is always</text>
+<text x="470.0" y="176.0" class="note" text-anchor="start">on the row side.</text>
+</svg>
+      </div>
+      <figcaption>Every diode in these drawings is drawn like this: <strong>red body, black band</strong>, just like the real 1N4148. The black band always faces the row bus. Turn the diode around and that key stops working.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Close-up</span>
+      <h2>One encoder up close</h2>
+      <p>An EC11 takes the place of a key. A printed 3 mm spacer ring on its bushing makes it sit lower, so the shaft doesn't stand too tall above the plate. The nut goes on from the top, without its washer.</p>
+    </div>
+    <figure>
+      <div class="scroll narrow">
+<svg viewBox="0 0 820 340" role="img" aria-label="Side view: a printed 3 mm spacer ring sits on the EC11 bushing under the plate; the bushing comes up through the 7.8 mm hole and the nut, without its washer, clamps it from the top; the body and pins hang below; the knob goes on the shaft.">
+<rect x="10.0" y="200.0" width="181.0" height="15.0" rx="0" class="plate"/>
+<rect x="269.0" y="200.0" width="181.0" height="15.0" rx="0" class="plate"/>
+<rect x="170.0" y="215.0" width="21.0" height="30.0" rx="0" class="spacer"/>
+<rect x="269.0" y="215.0" width="21.0" height="30.0" rx="0" class="spacer"/>
+<rect x="170.0" y="245.0" width="120.0" height="65.0" rx="2" class="part"/>
+<rect x="195.0" y="190.0" width="70.0" height="55.0" rx="0" class="metal"/>
+<rect x="200.0" y="50.0" width="60.0" height="140.0" rx="0" class="metal"/>
+<rect x="182.5" y="180.0" width="95.0" height="20.0" rx="0" class="metal"/>
+<rect x="145.0" y="30.0" width="170.0" height="160.0" rx="6" class="knob"/>
+<rect x="176.0" y="310.0" width="8.0" height="45.0" rx="0" class="metal"/>
+<rect x="276.0" y="310.0" width="8.0" height="45.0" rx="0" class="metal"/>
+<text x="10.0" y="190.0" class="edge" text-anchor="start">OUTSIDE (TOP)</text>
+<text x="10.0" y="237.0" class="edge" text-anchor="start">INSIDE THE CASE</text>
+<polyline points="318.0,80.0 466.0,36.0 474.0,36.0" class="leader"/>
+<text x="480.0" y="40.0" class="note" text-anchor="start">Knob (15.5 mm tall), pushed onto the shaft</text>
+<polyline points="280.5,190.0 466.0,70.0 474.0,70.0" class="leader"/>
+<text x="480.0" y="74.0" class="note" text-anchor="start">Nut, no washer: only ~2.5 mm of thread is left</text>
+<polyline points="268.0,195.0 466.0,104.0 474.0,104.0" class="leader"/>
+<text x="480.0" y="108.0" class="note" text-anchor="start">Threaded M7 bushing up through the 7.8 mm hole</text>
+<polyline points="453.0,207.5 466.0,138.0 474.0,138.0" class="leader"/>
+<text x="480.0" y="142.0" class="note" text-anchor="start">Plate, 1.5 mm thin round the encoder</text>
+<polyline points="293.0,230.0 466.0,172.0 474.0,172.0" class="leader"/>
+<text x="480.0" y="176.0" class="note" text-anchor="start">Printed 3 mm spacer ring (enc_spacer.stl)</text>
+<polyline points="293.0,275.0 466.0,206.0 474.0,206.0" class="leader"/>
+<text x="480.0" y="210.0" class="note" text-anchor="start">EC11 body hangs 3 mm lower than without it</text>
+<polyline points="287.0,330.0 466.0,240.0 474.0,240.0" class="leader"/>
+<text x="480.0" y="244.0" class="note" text-anchor="start">Pins point down: solder wires here</text>
+</svg>
+      </div>
+      <figcaption>Snip off or bend flat the small anti-rotation tab next to the bushing first. If the nut can't catch the thread, hot-glue the ring to the plate and the encoder to the ring instead.</figcaption>
+    </figure>
+    <figure>
+      <div class="scroll narrow">
+<svg viewBox="0 0 820 490" role="img" aria-label="One EC11 seen from below. Back side: two push pins; the right one (nearer the keys) goes through a diode, band toward the row, to row 2 (A6) for E1 or row 0 (A4) for E2; the left one goes to column 3 (B0) for both. Front side, left to right: B to B8 or A0, C to its screen’s GND pin, A to B1 or B9.">
+<text x="410.0" y="22.0" class="edge" text-anchor="middle">BACK ↑ · push pins on this side</text>
+<rect x="326.0" y="151.0" width="168.0" height="168.0" rx="5" class="part"/>
+<circle cx="410.0" cy="235.0" r="49.0" class="shaft"/>
+<text x="410.0" y="241.0" class="keyname" text-anchor="middle">EC11</text>
+<text x="410.0" y="173.4" class="pinlbl" text-anchor="middle">push switch</text>
+<text x="410.0" y="303.6" class="pinlbl" text-anchor="middle">encoder</text>
+<text x="459.0" y="102.5" class="pinlbl" text-anchor="start">black band toward row</text>
+<text x="375.0" y="328.0" class="pinbig" text-anchor="middle">B</text>
+<text x="410.0" y="328.0" class="pinbig" text-anchor="middle">C</text>
+<text x="445.0" y="328.0" class="pinbig" text-anchor="middle">A</text>
+<text x="410.0" y="470.0" class="edge" text-anchor="middle">FRONT ↓ · 3 turning pins on this side, toward its screen</text>
+<line x1="445.0" y1="130.0" x2="445.0" y2="67.0" class="w w-row"/>
+<rect x="439.0" y="88.9" width="12" height="19.2" rx="2" class="diode"/>
+<rect x="439.0" y="88.9" width="12" height="7.7" class="band"/>
+<rect x="439.0" y="88.9" width="12" height="19.2" rx="2" class="diode-edge"/>
+<polyline points="445.0,67.0 550.0,67.0 550.0,62.0" class="w w-row"/>
+<rect x="470.4" y="40.0" width="239.2" height="20" rx="10" class="tag tag-row"/><text x="590.0" y="54.5" class="tagtxt tt-row" text-anchor="middle">E1: ROW 2 → A6 · E2: ROW 0 → A4</text>
+<polyline points="375.0,130.0 375.0,95.0 270.0,95.0 270.0,67.0" class="w w-col"/>
+<rect x="200.8" y="40.0" width="138.4" height="20" rx="10" class="tag tag-col"/><text x="270.0" y="54.5" class="tagtxt tt-col" text-anchor="middle">COL 3 → B0 (both)</text>
+<polyline points="375.0,340.0 375.0,382.0 242.0,382.0 242.0,417.0" class="w w-enc"/>
+<rect x="158.4" y="422.0" width="167.2" height="20" rx="10" class="tag tag-enc"/><text x="242.0" y="436.5" class="tagtxt tt-enc" text-anchor="middle">B → B8 (E1) · A0 (E2)</text>
+<polyline points="410.0,340.0 410.0,382.0 410.0,382.0 410.0,417.0" class="w w-gnd"/>
+<rect x="351.6" y="422.0" width="116.8" height="20" rx="10" class="tag tag-gnd"/><text x="410.0" y="436.5" class="tagtxt tt-gnd" text-anchor="middle">C → screen GND</text>
+<polyline points="445.0,340.0 445.0,382.0 578.0,382.0 578.0,417.0" class="w w-enc"/>
+<rect x="494.4" y="422.0" width="167.2" height="20" rx="10" class="tag tag-enc"/><text x="578.0" y="436.5" class="tagtxt tt-enc" text-anchor="middle">A → B1 (E1) · B9 (E2)</text>
+<circle cx="445.0" cy="130.0" r="3.4" class="joint j-row"/>
+<circle cx="375.0" cy="130.0" r="3.4" class="joint j-col"/>
+<circle cx="375.0" cy="340.0" r="3.4" class="joint j-enc"/>
+<circle cx="410.0" cy="340.0" r="3.4" class="joint j-gnd"/>
+<circle cx="445.0" cy="340.0" r="3.4" class="joint j-enc"/>
+</svg>
+      </div>
+      <figcaption>Seen from below, the same way as the plate in the main drawing. <strong>Turn the encoder so the 3-pin side faces the front, toward the screens.</strong> The two encoders are wired the same way; only the column and the BlackPill pins for A and B differ. If a knob turns the wrong way, swap the two keycodes on that knob in the keymap and leave the wires alone.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Pin reference</span>
+      <h2>BlackPill pins and the buttons</h2>
+      <p>Seen from above as it sits in the lid cradle: upside down, chips and the board's own buttons facing the lid, back side up, USB-C pointing at the back wall. The male header strips go in from the chip side, so the long pins stick up out of the back and the short ends sit on the cradle rails; the pin names are printed next to each hole: check them before plugging each wire on.</p>
+    </div>
+    <figure>
+      <div class="scroll narrow">
+<svg viewBox="0 0 840 823" role="img" aria-label="WeAct BlackPill as it sits in the lid: upside down, back side up, USB-C at the top. Right header, from the USB end: B12 to B9, then 5V, G, 3V3. B14 row 3, A8 column 1, A15 column 2, B6 multiplexer SCL, B7 multiplexer SDA, B8 E1 B, B9 E2 A. Left header, from the USB end: 5V, G, 3V3, B10, B2, B1 E1 A, B0 column 3 (knob pushes), A7 column 0, A6 to A4 rows 2 to 0, A3 to A1 sliders, A0 E2 B, R to the reset button, C15, C14, C13, VB. A9, A10, A11, A12, B2, C13, C14 and C15 are avoided. The B button is wired across the board's own BOOT0 button, underneath.">
+<rect x="300" y="70" width="231.0" height="583.0" rx="6" class="board"/>
+<rect x="366.0" y="58.0" width="99.0" height="33.0" rx="6" class="usb"/>
+<text x="415.5" y="46.0" class="edge" text-anchor="middle">USB-C · TOWARD THE BACK WALL</text>
+<rect x="349.5" y="213.0" width="44.0" height="44.0" rx="3" class="part" stroke-dasharray="5 4"/>
+<text x="371.5" y="239.0" class="pinmini" text-anchor="middle">NRST</text>
+<rect x="426.5" y="213.0" width="44.0" height="44.0" rx="3" class="part" stroke-dasharray="5 4"/>
+<text x="448.5" y="239.0" class="pinmini" text-anchor="middle">BOOT0</text>
+<rect x="404.5" y="521.0" width="44.0" height="44.0" rx="3" class="part" stroke-dasharray="5 4"/>
+<text x="426.5" y="547.0" class="pinmini" text-anchor="middle">KEY</text>
+<text x="415.5" y="639.0" class="port" text-anchor="middle">chips underneath</text>
+<circle cx="499.3" cy="98.6" r="7" class="pad pad-off"/>
+<text x="485.3" y="102.6" class="padname" text-anchor="end">B12</text>
+<circle cx="499.3" cy="126.5" r="7" class="pad pad-off"/>
+<text x="485.3" y="130.5" class="padname" text-anchor="end">B13</text>
+<circle cx="499.3" cy="154.5" r="7" class="pad pad-row"/>
+<text x="485.3" y="158.5" class="padname" text-anchor="end">B14</text>
+<line x1="506.3" y1="154.5" x2="521.3" y2="154.5" class="w w-row"/>
+<rect x="521.3" y="143.5" width="52.0" height="20" rx="10" class="tag tag-row"/><text x="547.3" y="158.0" class="tagtxt tt-row" text-anchor="middle">ROW 3</text>
+<circle cx="499.3" cy="182.4" r="7" class="pad pad-off"/>
+<text x="485.3" y="186.4" class="padname" text-anchor="end">B15</text>
+<circle cx="499.3" cy="210.4" r="7" class="pad pad-col"/>
+<text x="485.3" y="214.4" class="padname" text-anchor="end">A8</text>
+<line x1="506.3" y1="210.4" x2="521.3" y2="210.4" class="w w-col"/>
+<rect x="521.3" y="199.4" width="52.0" height="20" rx="10" class="tag tag-col"/><text x="547.3" y="213.9" class="tagtxt tt-col" text-anchor="middle">COL 1</text>
+<circle cx="499.3" cy="238.3" r="7" class="pad pad-avoid"/>
+<text x="485.3" y="242.3" class="padname" text-anchor="end">A9</text>
+<line x1="506.3" y1="238.3" x2="521.3" y2="238.3" class="w w-off"/>
+<rect x="521.3" y="227.3" width="138.4" height="20" rx="10" class="tag tag-avoid"/><text x="590.5" y="241.8" class="tagtxt tt-avoid" text-anchor="middle">avoid (USB sense)</text>
+<circle cx="499.3" cy="266.2" r="7" class="pad pad-avoid"/>
+<text x="485.3" y="270.2" class="padname" text-anchor="end">A10</text>
+<line x1="506.3" y1="266.2" x2="521.3" y2="266.2" class="w w-off"/>
+<rect x="521.3" y="255.2" width="95.2" height="20" rx="10" class="tag tag-avoid"/><text x="568.9" y="269.7" class="tagtxt tt-avoid" text-anchor="middle">avoid (DFU)</text>
+<circle cx="499.3" cy="294.2" r="7" class="pad pad-avoid"/>
+<text x="485.3" y="298.2" class="padname" text-anchor="end">A11</text>
+<line x1="506.3" y1="294.2" x2="521.3" y2="294.2" class="w w-off"/>
+<rect x="521.3" y="283.2" width="37.6" height="20" rx="10" class="tag tag-avoid"/><text x="540.1" y="297.7" class="tagtxt tt-avoid" text-anchor="middle">USB</text>
+<circle cx="499.3" cy="322.1" r="7" class="pad pad-avoid"/>
+<text x="485.3" y="326.1" class="padname" text-anchor="end">A12</text>
+<line x1="506.3" y1="322.1" x2="521.3" y2="322.1" class="w w-off"/>
+<rect x="521.3" y="311.1" width="37.6" height="20" rx="10" class="tag tag-avoid"/><text x="540.1" y="325.6" class="tagtxt tt-avoid" text-anchor="middle">USB</text>
+<circle cx="499.3" cy="350.1" r="7" class="pad pad-col"/>
+<text x="485.3" y="354.1" class="padname" text-anchor="end">A15</text>
+<line x1="506.3" y1="350.1" x2="521.3" y2="350.1" class="w w-col"/>
+<rect x="521.3" y="339.1" width="52.0" height="20" rx="10" class="tag tag-col"/><text x="547.3" y="353.6" class="tagtxt tt-col" text-anchor="middle">COL 2</text>
+<circle cx="499.3" cy="378.0" r="7" class="pad pad-off"/>
+<text x="485.3" y="382.0" class="padname" text-anchor="end">B3</text>
+<circle cx="499.3" cy="405.9" r="7" class="pad pad-off"/>
+<text x="485.3" y="409.9" class="padname" text-anchor="end">B4</text>
+<circle cx="499.3" cy="433.9" r="7" class="pad pad-off"/>
+<text x="485.3" y="437.9" class="padname" text-anchor="end">B5</text>
+<circle cx="499.3" cy="461.8" r="7" class="pad pad-scr"/>
+<text x="485.3" y="465.8" class="padname" text-anchor="end">B6</text>
+<line x1="506.3" y1="461.8" x2="521.3" y2="461.8" class="w w-scr"/>
+<rect x="521.3" y="450.8" width="116.8" height="20" rx="10" class="tag tag-scr"/><text x="579.7" y="465.3" class="tagtxt tt-scr" text-anchor="middle">Mux SCL (I2C1)</text>
+<circle cx="499.3" cy="489.8" r="7" class="pad pad-scr"/>
+<text x="485.3" y="493.8" class="padname" text-anchor="end">B7</text>
+<line x1="506.3" y1="489.8" x2="521.3" y2="489.8" class="w w-scr"/>
+<rect x="521.3" y="478.8" width="116.8" height="20" rx="10" class="tag tag-scr"/><text x="579.7" y="493.3" class="tagtxt tt-scr" text-anchor="middle">Mux SDA (I2C1)</text>
+<circle cx="499.3" cy="517.7" r="7" class="pad pad-enc"/>
+<text x="485.3" y="521.7" class="padname" text-anchor="end">B8</text>
+<line x1="506.3" y1="517.7" x2="521.3" y2="517.7" class="w w-enc"/>
+<rect x="521.3" y="506.7" width="44.8" height="20" rx="10" class="tag tag-enc"/><text x="543.7" y="521.2" class="tagtxt tt-enc" text-anchor="middle">E1 B</text>
+<circle cx="499.3" cy="545.6" r="7" class="pad pad-enc"/>
+<text x="485.3" y="549.6" class="padname" text-anchor="end">B9</text>
+<line x1="506.3" y1="545.6" x2="521.3" y2="545.6" class="w w-enc"/>
+<rect x="521.3" y="534.6" width="44.8" height="20" rx="10" class="tag tag-enc"/><text x="543.7" y="549.1" class="tagtxt tt-enc" text-anchor="middle">E2 A</text>
+<circle cx="499.3" cy="573.6" r="7" class="pad pad-off"/>
+<text x="485.3" y="577.6" class="padname" text-anchor="end">5V</text>
+<circle cx="499.3" cy="601.5" r="7" class="pad pad-gnd"/>
+<text x="485.3" y="605.5" class="padname" text-anchor="end">G</text>
+<line x1="506.3" y1="601.5" x2="521.3" y2="601.5" class="w w-gnd"/>
+<rect x="521.3" y="590.5" width="152.8" height="20" rx="10" class="tag tag-gnd"/><text x="597.7" y="605.0" class="tagtxt tt-gnd" text-anchor="middle">G (plug C: GND bus)</text>
+<circle cx="499.3" cy="629.5" r="7" class="pad pad-pwr"/>
+<text x="485.3" y="633.5" class="padname" text-anchor="end">3V3</text>
+<line x1="506.3" y1="629.5" x2="521.3" y2="629.5" class="w w-pwr"/>
+<rect x="521.3" y="618.5" width="232.0" height="20" rx="10" class="tag tag-pwr"/><text x="637.3" y="633.0" class="tagtxt tt-pwr" text-anchor="middle">3V3 (plug C: sliders, screens)</text>
+<circle cx="331.7" cy="98.6" r="7" class="pad pad-off"/>
+<text x="345.7" y="102.6" class="padname" text-anchor="start">5V</text>
+<circle cx="331.7" cy="126.5" r="7" class="pad pad-gnd"/>
+<text x="345.7" y="130.5" class="padname" text-anchor="start">G</text>
+<line x1="324.7" y1="126.5" x2="309.7" y2="126.5" class="w w-gnd"/>
+<rect x="142.5" y="115.5" width="167.2" height="20" rx="10" class="tag tag-gnd"/><text x="226.1" y="130.0" class="tagtxt tt-gnd" text-anchor="middle">G (mux GND, R button)</text>
+<circle cx="331.7" cy="154.5" r="7" class="pad pad-pwr"/>
+<text x="345.7" y="158.5" class="padname" text-anchor="start">3V3</text>
+<line x1="324.7" y1="154.5" x2="309.7" y2="154.5" class="w w-pwr"/>
+<rect x="200.1" y="143.5" width="109.6" height="20" rx="10" class="tag tag-pwr"/><text x="254.9" y="158.0" class="tagtxt tt-pwr" text-anchor="middle">3V3 (mux VIN)</text>
+<circle cx="331.7" cy="182.4" r="7" class="pad pad-off"/>
+<text x="345.7" y="186.4" class="padname" text-anchor="start">B10</text>
+<circle cx="331.7" cy="210.4" r="7" class="pad pad-avoid"/>
+<text x="345.7" y="214.4" class="padname" text-anchor="start">B2</text>
+<line x1="324.7" y1="210.4" x2="309.7" y2="210.4" class="w w-off"/>
+<rect x="257.7" y="199.4" width="52.0" height="20" rx="10" class="tag tag-avoid"/><text x="283.7" y="213.9" class="tagtxt tt-avoid" text-anchor="middle">BOOT1</text>
+<circle cx="331.7" cy="238.3" r="7" class="pad pad-enc"/>
+<text x="345.7" y="242.3" class="padname" text-anchor="start">B1</text>
+<line x1="324.7" y1="238.3" x2="309.7" y2="238.3" class="w w-enc"/>
+<rect x="264.9" y="227.3" width="44.8" height="20" rx="10" class="tag tag-enc"/><text x="287.3" y="241.8" class="tagtxt tt-enc" text-anchor="middle">E1 A</text>
+<circle cx="331.7" cy="266.2" r="7" class="pad pad-col"/>
+<text x="345.7" y="270.2" class="padname" text-anchor="start">B0</text>
+<line x1="324.7" y1="266.2" x2="309.7" y2="266.2" class="w w-col"/>
+<rect x="156.9" y="255.2" width="152.8" height="20" rx="10" class="tag tag-col"/><text x="233.3" y="269.7" class="tagtxt tt-col" text-anchor="middle">COL 3 (knob pushes)</text>
+<circle cx="331.7" cy="294.2" r="7" class="pad pad-col"/>
+<text x="345.7" y="298.2" class="padname" text-anchor="start">A7</text>
+<line x1="324.7" y1="294.2" x2="309.7" y2="294.2" class="w w-col"/>
+<rect x="257.7" y="283.2" width="52.0" height="20" rx="10" class="tag tag-col"/><text x="283.7" y="297.7" class="tagtxt tt-col" text-anchor="middle">COL 0</text>
+<circle cx="331.7" cy="322.1" r="7" class="pad pad-row"/>
+<text x="345.7" y="326.1" class="padname" text-anchor="start">A6</text>
+<line x1="324.7" y1="322.1" x2="309.7" y2="322.1" class="w w-row"/>
+<rect x="257.7" y="311.1" width="52.0" height="20" rx="10" class="tag tag-row"/><text x="283.7" y="325.6" class="tagtxt tt-row" text-anchor="middle">ROW 2</text>
+<circle cx="331.7" cy="350.1" r="7" class="pad pad-row"/>
+<text x="345.7" y="354.1" class="padname" text-anchor="start">A5</text>
+<line x1="324.7" y1="350.1" x2="309.7" y2="350.1" class="w w-row"/>
+<rect x="257.7" y="339.1" width="52.0" height="20" rx="10" class="tag tag-row"/><text x="283.7" y="353.6" class="tagtxt tt-row" text-anchor="middle">ROW 1</text>
+<circle cx="331.7" cy="378.0" r="7" class="pad pad-row"/>
+<text x="345.7" y="382.0" class="padname" text-anchor="start">A4</text>
+<line x1="324.7" y1="378.0" x2="309.7" y2="378.0" class="w w-row"/>
+<rect x="257.7" y="367.0" width="52.0" height="20" rx="10" class="tag tag-row"/><text x="283.7" y="381.5" class="tagtxt tt-row" text-anchor="middle">ROW 0</text>
+<circle cx="331.7" cy="405.9" r="7" class="pad pad-pot"/>
+<text x="345.7" y="409.9" class="padname" text-anchor="start">A3</text>
+<line x1="324.7" y1="405.9" x2="309.7" y2="405.9" class="w w-pot"/>
+<rect x="192.9" y="394.9" width="116.8" height="20" rx="10" class="tag tag-pot"/><text x="251.3" y="409.4" class="tagtxt tt-pot" text-anchor="middle">Slider 3 pin 2</text>
+<circle cx="331.7" cy="433.9" r="7" class="pad pad-pot"/>
+<text x="345.7" y="437.9" class="padname" text-anchor="start">A2</text>
+<line x1="324.7" y1="433.9" x2="309.7" y2="433.9" class="w w-pot"/>
+<rect x="192.9" y="422.9" width="116.8" height="20" rx="10" class="tag tag-pot"/><text x="251.3" y="437.4" class="tagtxt tt-pot" text-anchor="middle">Slider 2 pin 2</text>
+<circle cx="331.7" cy="461.8" r="7" class="pad pad-pot"/>
+<text x="345.7" y="465.8" class="padname" text-anchor="start">A1</text>
+<line x1="324.7" y1="461.8" x2="309.7" y2="461.8" class="w w-pot"/>
+<rect x="192.9" y="450.8" width="116.8" height="20" rx="10" class="tag tag-pot"/><text x="251.3" y="465.3" class="tagtxt tt-pot" text-anchor="middle">Slider 1 pin 2</text>
+<circle cx="331.7" cy="489.8" r="7" class="pad pad-enc"/>
+<text x="345.7" y="493.8" class="padname" text-anchor="start">A0</text>
+<line x1="324.7" y1="489.8" x2="309.7" y2="489.8" class="w w-enc"/>
+<rect x="264.9" y="478.8" width="44.8" height="20" rx="10" class="tag tag-enc"/><text x="287.3" y="493.3" class="tagtxt tt-enc" text-anchor="middle">E2 B</text>
+<circle cx="331.7" cy="517.7" r="7" class="pad pad-rst"/>
+<text x="345.7" y="521.7" class="padname" text-anchor="start">R</text>
+<circle cx="331.7" cy="545.6" r="7" class="pad pad-avoid"/>
+<text x="345.7" y="549.6" class="padname" text-anchor="start">C15</text>
+<line x1="324.7" y1="545.6" x2="309.7" y2="545.6" class="w w-off"/>
+<rect x="192.9" y="534.6" width="116.8" height="20" rx="10" class="tag tag-avoid"/><text x="251.3" y="549.1" class="tagtxt tt-avoid" text-anchor="middle">32 kHz crystal</text>
+<circle cx="331.7" cy="573.6" r="7" class="pad pad-avoid"/>
+<text x="345.7" y="577.6" class="padname" text-anchor="start">C14</text>
+<line x1="324.7" y1="573.6" x2="309.7" y2="573.6" class="w w-off"/>
+<rect x="192.9" y="562.6" width="116.8" height="20" rx="10" class="tag tag-avoid"/><text x="251.3" y="577.1" class="tagtxt tt-avoid" text-anchor="middle">32 kHz crystal</text>
+<circle cx="331.7" cy="601.5" r="7" class="pad pad-avoid"/>
+<text x="345.7" y="605.5" class="padname" text-anchor="start">C13</text>
+<line x1="324.7" y1="601.5" x2="309.7" y2="601.5" class="w w-off"/>
+<rect x="272.1" y="590.5" width="37.6" height="20" rx="10" class="tag tag-avoid"/><text x="290.9" y="605.0" class="tagtxt tt-avoid" text-anchor="middle">LED</text>
+<circle cx="331.7" cy="629.5" r="7" class="pad pad-off"/>
+<text x="345.7" y="633.5" class="padname" text-anchor="start">VB</text>
+<rect x="111.7" y="693.0" width="60" height="60" rx="6" class="part"/>
+<text x="141.7" y="728.0" class="keyname" text-anchor="middle">R</text>
+<text x="141.7" y="773.0" class="port" text-anchor="middle">reset button (lid)</text>
+<polyline points="324.7,517.7 141.7,517.7 141.7,693.0" class="w w-rst"/>
+<polyline points="111.7,745.0 71.7,745.0 71.7,783.0" class="w w-gnd"/>
+<rect x="49.3" y="784.0" width="44.8" height="20" rx="10" class="tag tag-gnd"/><text x="71.7" y="798.5" class="tagtxt tt-gnd" text-anchor="middle">to G</text>
+<rect x="621.0" y="693.0" width="60" height="60" rx="6" class="part"/>
+<text x="651.0" y="728.0" class="keyname" text-anchor="middle">B</text>
+<text x="651.0" y="773.0" class="port" text-anchor="middle">BOOT0 button (lid)</text>
+<polyline points="435.3,257.0 435.3,689.0 637.0,689.0 637.0,693.0" class="w w-rst"/>
+<polyline points="461.7,257.0 461.7,675.0 665.0,675.0 665.0,693.0" class="w w-rst"/>
+<circle cx="435.3" cy="257.0" r="3.4" class="joint j-rst"/>
+<circle cx="461.7" cy="257.0" r="3.4" class="joint j-rst"/>
+<text x="609.0" y="721.0" class="port" text-anchor="end">two thin wires on the board's own</text>
+<text x="609.0" y="735.0" class="port" text-anchor="end">BOOT0 button, under the board</text>
+</svg>
+      </div>
+      <figcaption><strong>20 pins used.</strong> G and 3V3 each have two pads; use either. Leave the grey ones alone: A9 senses USB and A10 can stop USB loading, A11 and A12 are the USB lines, B2 is BOOT1, C13 drives the LED, C14 and C15 hold a crystal. BOOT0 has no pin hole, so the B button is wired across the board's own BOOT0 button: find two of its legs that beep only while it is pressed, and solder both wires on before the board goes into the cradle, since the button ends up underneath. A0 also has the board's KEY button on it, which is fine. If your board has the small 8-pin flash chip fitted on the back, A4 to A7 are taken: tell me before wiring.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Build order</span>
+      <h2>Wiring checklist</h2>
+    </div>
+    <div class="check-bar">
+      <span class="progress" id="progress" aria-live="polite">0 of 11 done</span>
+      <button type="button" id="clear">Clear ticks</button>
+    </div>
+    <ol class="check" id="checklist">
+<li><label><input type="checkbox" id="chk0"><span class="swatch sw-plate"></span><span class="grp">Plate</span><span class="what">Switches clipped in; encoders with spacer ring and nut; sliders and screens pegged and glued</span></label></li>
+<li><label><input type="checkbox" id="chk1"><span class="swatch sw-col"></span><span class="grp">Buses</span><span class="what">Column buses: bare copper along each key column, front-row pin to back-row pin, switch pins soldered on</span></label></li>
+<li><label><input type="checkbox" id="chk2"><span class="swatch sw-row"></span><span class="grp">Buses</span><span class="what">Row buses: bare copper across each key row, rows 0 and 2 on into the gap by the knobs; sleeve every crossing</span></label></li>
+<li><label><input type="checkbox" id="chk3"><span class="swatch sw-gnd"></span><span class="grp">Buses</span><span class="what">GND and 3V3 pairs: across the front (in front of the screens) and across the slider ends; 2 insulated links up the slider side</span></label></li>
+<li><label><input type="checkbox" id="chk4"><span class="swatch sw-row"></span><span class="grp">Keys</span><span class="what">Diode from each key's free pin to its row bus, black band at the bus</span></label></li>
+<li><label><input type="checkbox" id="chk5"><span class="swatch sw-enc"></span><span class="grp">Knobs</span><span class="what">Push: diode from the pin nearer the keys to row 0 (E2) or row 2 (E1) · column 3 wire up the wall, E1 to E2 · C: to its screen's GND pin</span></label></li>
+<li><label><input type="checkbox" id="chk6"><span class="swatch sw-pwr"></span><span class="grp">Sliders</span><span class="what">Pins 1 and 2 at the back end, pin 3 at the front · pin 1 → 3V3 back bus · pin 3 → its screen's GND pin · 100 nF right of the slider body (from the back): one leg to pin 2, the other to the GND back bus</span></label></li>
+<li><label><input type="checkbox" id="chk7"><span class="swatch sw-pwr"></span><span class="grp">Screens</span><span class="what">VCC → 3V3 · GND → GND, jumpers down to the front pair; S5's down the gap by the keys</span></label></li>
+<li><label><input type="checkbox" id="chk8"><span class="swatch sw-plate"></span><span class="grp">Lid</span><span class="what">Male header pins on the BlackPill and multiplexer (long pins up); L5 soldered to the BlackPill's BOOT0 button; BlackPill upside down in its cradle (chips down, USB-C at the back), multiplexer glued right of it, B and R buttons in their pockets</span></label></li>
+<li><label><input type="checkbox" id="chk9"><span class="swatch sw-rst"></span><span class="grp">Lid</span><span class="what">Lid wires L1–L6: mux to BlackPill, and the two buttons (harness table)</span></label></li>
+<li><label><input type="checkbox" id="chk10"><span class="swatch sw-scr"></span><span class="grp">Harness</span><span class="what">Wires 1–27: soldered at the plate end, gathered into ribbons A–E along the back edge, crimped into plugs A–E (harness table)</span></label></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Before closing the case</span>
+      <h2>Test with a meter, USB unplugged</h2>
+    </div>
+    <ol class="steps">
+      <li>Beep setting, probes on <span class="pin">3V3</span> and <span class="pin">G</span>: it must <strong>not</strong> beep.</li>
+      <li>Diode setting, red probe on the column pin, black on the row pin, for example <span class="pin">A7</span> and <span class="pin">A4</span> for K1. Press: about 0.5–0.7 V. Release: nothing. Repeat for all 14 positions: 12 keys and both knob pushes.</li>
+      <li>A reading with the key released means that row and column touch somewhere. Nothing when pressed usually means a diode is in backwards.</li>
+      <li>Knobs: beep setting between <span class="pin">B1</span> and <span class="pin">G</span>; turning knob 1 clicks it on and off. Same for B8, then B9 and A0 for knob 2.</li>
+      <li>Sliders: resistance setting between <span class="pin">A1</span> and <span class="pin">G</span>; moving slider 1 runs it smoothly from 0 to about 10 kΩ. Same for A2 and A3.</li>
+      <li>Screens: beep each screen's VCC to 3V3 and GND to G. Its SDA and SCL beep only with its own mux channel pads (S1 SD0 and SC0, and so on).</li>
+      <li>Buses: beep each row bus against each column bus with no key pressed: none may beep. If one does, a sleeve has slipped at that crossing.</li>
+    </ol>
+  </section>
+</main>
+
+<script>
+(function () {
+  // copy the main drawing next to the harness table so a picked wire shows beside its row
+  var hside = document.getElementById('hside');
+  var side = document.querySelector('#mainscroll svg.wiring').cloneNode(true);
+  side.setAttribute('aria-hidden', 'true');
+  hside.insertBefore(side, hside.firstChild);
+
+  // zoom (wheel, buttons) and pan (drag) the side drawing by moving its viewBox
+  var vb0 = side.viewBox.baseVal, X0 = vb0.x, Y0 = vb0.y, W0 = vb0.width, H0 = vb0.height;
+  var vb = {x: X0, y: Y0, w: W0};
+  function setVB() {
+    vb.w = Math.min(Math.max(vb.w, W0 / 15), W0);
+    var h = vb.w * H0 / W0;
+    vb.x = Math.min(Math.max(vb.x, X0), X0 + W0 - vb.w);
+    vb.y = Math.min(Math.max(vb.y, Y0), Y0 + H0 - h);
+    side.setAttribute('viewBox', vb.x + ' ' + vb.y + ' ' + vb.w + ' ' + h);
+  }
+  function toSvg(cx, cy) {
+    var pt = side.createSVGPoint(); pt.x = cx; pt.y = cy;
+    return pt.matrixTransform(side.getScreenCTM().inverse());
+  }
+  function zoomAt(k, cx, cy) {
+    var p = toSvg(cx, cy), w = Math.min(Math.max(vb.w * k, W0 / 15), W0);
+    k = w / vb.w;
+    vb.x = p.x - (p.x - vb.x) * k; vb.y = p.y - (p.y - vb.y) * k; vb.w = w;
+    setVB();
+  }
+  function zoomCentre(k) { var r = side.getBoundingClientRect(); zoomAt(k, r.left + r.width / 2, r.top + r.height / 2); }
+  side.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    zoomAt(Math.exp((e.deltaMode ? e.deltaY * 30 : e.deltaY) * 0.0015), e.clientX, e.clientY);
+  }, {passive: false});
+  hside.querySelector('.zoombar').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-z]');
+    if (!b) return;
+    var z = b.getAttribute('data-z');
+    if (z === 'fit') { vb = {x: X0, y: Y0, w: W0}; setVB(); } else zoomCentre(z === 'in' ? 1 / 1.5 : 1.5);
+  });
+  var drag = null, dragged = false;
+  side.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0) return;
+    drag = {cx: e.clientX, cy: e.clientY, x: vb.x, y: vb.y, id: e.pointerId, scale: side.getScreenCTM().a};
+    dragged = false;
+  });
+  side.addEventListener('pointermove', function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.cx, dy = e.clientY - drag.cy;
+    if (!dragged && Math.abs(dx) + Math.abs(dy) < 5) return;
+    if (!dragged) { dragged = true; side.setPointerCapture(e.pointerId); hside.classList.add('panning'); }
+    vb.x = drag.x - dx / drag.scale; vb.y = drag.y - dy / drag.scale;
+    setVB();
+  });
+  function endDrag() { drag = null; hside.classList.remove('panning'); }
+  side.addEventListener('pointerup', endDrag);
+  side.addEventListener('pointercancel', endDrag);
+  // a drag ends in a click: swallow it so panning doesn't pick or clear anything
+  hside.addEventListener('click', function (e) { if (dragged) { dragged = false; e.stopPropagation(); } }, true);
+  var picker = document.querySelector('.picker');
+  function stick() { document.documentElement.style.setProperty('--stick', (picker.offsetHeight + 12) + 'px'); }
+  stick();
+  window.addEventListener('resize', stick);
+  var svgs = Array.prototype.slice.call(document.querySelectorAll('svg.wiring'));
+  var status = document.getElementById('pick-status');
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.picker [data-pick], .picker [data-bus]'));
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#harness tr[data-w]'));
+  var HINT = status.textContent;
+  var NAMES = {gnd: 'GND bus', '3v3': '3V3 bus', col3: 'column 3 (knob pushes)'};
+  function busName(n) {
+    if (NAMES[n]) return NAMES[n];
+    var m = /^(row|col)(\d)$/.exec(n);
+    return m ? (m[1] === 'row' ? 'row ' : 'column ') + m[2] : n;
+  }
+  var all = [];
+  svgs.forEach(function (svg) { all = all.concat(Array.prototype.slice.call(svg.querySelectorAll('[data-o]'))); });
+  function nets(el) { return (el.getAttribute('data-n') || '').split(' '); }
+  function isBus(n) { return /^(row\d|col\d|gnd|3v3)$/.test(n); }
+  function o(el) { return el.getAttribute('data-o'); }
+  function rowFor(w) { return rows.filter(function (r) { return r.getAttribute('data-w') === w; })[0]; }
+
+  // which drawing items to keep for a pick: returns {on: fn(el), text: html}
+  function forPart(p) {
+    var mine = {}, partners = {};
+    all.forEach(function (el) { if (o(el) === p) nets(el).forEach(function (n) { if (n !== 'body') mine[n] = true; }); });
+    function shared(el) { return nets(el).some(function (n) { return mine[n] && !isBus(n); }); }
+    all.forEach(function (el) { if (o(el) !== p && o(el) !== 'bus' && shared(el)) partners[o(el)] = true; });
+    var bus = Object.keys(mine).filter(isBus).map(busName), with_ = Object.keys(partners);
+    return {
+      on: function (el) {
+        return o(el) === p || (o(el) === 'bus' && nets(el).some(function (n) { return mine[n]; }))
+          || (o(el) !== 'bus' && shared(el)) || (partners[o(el)] && el.getAttribute('data-n') === 'body');
+      },
+      text: '<strong>' + p + '</strong>' + (bus.length ? ' joins: ' + bus.join(', ') : '')
+        + (with_.length ? (bus.length ? '; ' : ' ') + 'wired to: ' + with_.join(', ') : '') + '.'
+    };
+  }
+  function forBus(n) {
+    var owners = {};
+    all.forEach(function (el) { if (nets(el).indexOf(n) >= 0 && o(el) !== 'bus') owners[o(el)] = true; });
+    return {
+      on: function (el) { return nets(el).indexOf(n) >= 0 || (owners[o(el)] && el.getAttribute('data-n') === 'body'); },
+      text: '<strong>' + busName(n) + '</strong>: ' + Object.keys(owners).join(', ') + '.'
+    };
+  }
+  function forWire(w) {
+    var g = all.filter(function (el) { return el.getAttribute('data-w') === w; })[0];
+    if (!g) return null;
+    var owner = o(g), net = nets(g)[0], row = rowFor(w);
+    return {
+      on: function (el) {
+        if (el.getAttribute('data-w') === w) return true;
+        if (el.hasAttribute('data-w')) return false;
+        if (o(el) === owner && el.getAttribute('data-n') === 'body') return true;
+        return nets(el).indexOf(net) >= 0 && (o(el) === 'bus' || !isBus(net));
+      },
+      text: '<strong>Wire ' + w + '</strong>' + (row ? ': ' + row.children[1].textContent + ' → ' + row.children[2].textContent : '') + '.'
+    };
+  }
+  function show(sel) {
+    if (!sel) {
+      svgs.forEach(function (svg) { svg.classList.remove('filtered'); });
+      all.forEach(function (el) { el.classList.remove('on'); });
+      rows.forEach(function (r) { r.classList.remove('active'); });
+      status.textContent = HINT;
+      return;
+    }
+    all.forEach(function (el) { el.classList.toggle('on', !!sel.on(el)); });
+    svgs.forEach(function (svg) { svg.classList.add('filtered'); });
+    rows.forEach(function (r) {
+      var g = all.filter(function (el) { return el.getAttribute('data-w') === r.getAttribute('data-w'); })[0];
+      r.classList.toggle('active', !!(g && g.classList.contains('on')));
+    });
+    status.innerHTML = sel.text + ' <span class="hint">Pick it again, press Esc or click an empty spot to show everything.</span>';
+  }
+  function build(kind, id) { return kind === 'part' ? forPart(id) : kind === 'bus' ? forBus(id) : forWire(id); }
+  var current = null;     // {kind, id}
+  function restore() {
+    show(current ? build(current.kind, current.id) : null);
+    buttons.forEach(function (b) {
+      var on = current && ((current.kind === 'part' && b.getAttribute('data-pick') === current.id)
+        || (current.kind === 'bus' && b.getAttribute('data-bus') === current.id));
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  function pick(kind, id) {
+    current = (current && current.kind === kind && current.id === id) ? null : {kind: kind, id: id};
+    restore();
+  }
+  function preview(w) { var s = forWire(w); if (s) show(s); }
+
+  svgs.forEach(function (svg) {
+    svg.addEventListener('click', function (e) {
+      var w = e.target.closest('[data-w]');
+      if (w) { pick('wire', w.getAttribute('data-w')); return; }
+      var el = e.target.closest('[data-o]');
+      if (!el) { current = null; restore(); return; }
+      if (o(el) === 'bus') pick('bus', nets(el)[0]); else pick('part', o(el));
+    });
+    svg.addEventListener('mouseover', function (e) {
+      var w = e.target.closest('[data-w]');
+      if (w && !current) preview(w.getAttribute('data-w'));
+    });
+    svg.addEventListener('mouseout', function (e) {
+      var w = e.target.closest('[data-w]');
+      if (w && !current && !(e.relatedTarget && w.contains(e.relatedTarget))) restore();
+    });
+  });
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (b.hasAttribute('data-pick')) pick('part', b.getAttribute('data-pick'));
+      else pick('bus', b.getAttribute('data-bus'));
+    });
+  });
+  document.querySelector('.picker [data-clear]').addEventListener('click', function () { current = null; restore(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && current) { current = null; restore(); } });
+
+  rows.forEach(function (r) {
+    var w = r.getAttribute('data-w');
+    r.addEventListener('mouseenter', function () { preview(w); });
+    r.addEventListener('mouseleave', restore);
+    r.addEventListener('focus', function () { preview(w); });
+    r.addEventListener('blur', restore);
+    r.addEventListener('click', function (e) {
+      if (e.target.tagName === 'INPUT') return;
+      pick('wire', w);
+      if (!hside.offsetParent) document.getElementById('mainscroll').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+    });
+    r.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick('wire', w); } });
+  });
+
+  // ticks for the harness, kept in this browser
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#harness input[data-done]'));
+  var hprogress = document.getElementById('hprogress');
+  var KEY = 'macropad-harness-done';
+  var done = {};
+  var HIDEKEY = 'macropad-hide-done', hideDone = false, hidebtn = document.getElementById('hidedone');
+  try { hideDone = localStorage.getItem(HIDEKEY) === '1'; } catch (e) {}
+  function applyHide() {
+    svgs.forEach(function (svg) { svg.classList.toggle('hide-done', hideDone); });
+    hidebtn.setAttribute('aria-pressed', hideDone ? 'true' : 'false');
+  }
+  hidebtn.addEventListener('click', function () {
+    hideDone = !hideDone;
+    try { localStorage.setItem(HIDEKEY, hideDone ? '1' : '0'); } catch (e) {}
+    applyHide(); hupdate();
+  });
+  applyHide();
+  try { done = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { done = {}; }
+  function hupdate() {
+    var n = 0;
+    boxes.forEach(function (b) { var tr = b.closest('tr'); tr.classList.toggle('done', b.checked); if (b.checked) n++; });
+    hprogress.textContent = n + ' of ' + boxes.length + ' wires done';
+    // a bus counts as finished once every numbered wire on it is ticked
+    var busWires = {};
+    all.forEach(function (el) {
+      var w = el.getAttribute('data-w');
+      if (w) nets(el).filter(isBus).forEach(function (n) { (busWires[n] = busWires[n] || []).push(w); });
+    });
+    function busDone(n) { return !!busWires[n] && busWires[n].every(function (w) { return done[w]; }); }
+    all.forEach(function (el) {
+      var w = el.getAttribute('data-w');
+      if (w) el.classList.toggle('wdone', !!done[w]);
+      else if (o(el) === 'bus') el.classList.toggle('wdone', nets(el).every(busDone));
+    });
+    hidebtn.textContent = (hideDone ? 'Show' : 'Hide') + ' finished wires' + (n ? ' (' + n + ')' : '');
+  }
+  boxes.forEach(function (b) {
+    b.checked = !!done[b.getAttribute('data-done')];
+    b.addEventListener('change', function () {
+      done[b.getAttribute('data-done')] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {}
+      hupdate();
+    });
+  });
+  document.getElementById('hclear').addEventListener('click', function () {
+    boxes.forEach(function (b) { b.checked = false; }); done = {};
+    try { localStorage.setItem(KEY, '{}'); } catch (e) {}
+    hupdate();
+  });
+  hupdate();
+
+  var zoom = document.getElementById('zoom'), sc = document.getElementById('mainscroll');
+  zoom.addEventListener('click', function () {
+    var on = !sc.classList.contains('zoomed');
+    sc.classList.toggle('zoomed', on);
+    zoom.setAttribute('aria-pressed', on ? 'true' : 'false');
+    zoom.textContent = on ? 'Fit to width' : 'Zoom in';
+  });
+})();
+(function () {
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#checklist input'));
+  var progress = document.getElementById('progress');
+  var KEY = 'macropad-wiring-checks';
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(boxes.map(function (b) { return b.checked; }))); } catch (e) {}
+  }
+  function update() {
+    var n = boxes.filter(function (b) { return b.checked; }).length;
+    progress.textContent = n + ' of ' + boxes.length + ' done';
+  }
+  var saved = load();
+  boxes.forEach(function (b, i) {
+    b.checked = !!saved[i];
+    b.addEventListener('change', function () { save(); update(); });
+  });
+  document.getElementById('clear').addEventListener('click', function () {
+    boxes.forEach(function (b) { b.checked = false; });
+    save(); update();
+  });
+  update();
+})();
+</script>

@@ -1,0 +1,179 @@
+{
+    "manufacturer": "handwired",
+    "keyboard_name": "Macropad",
+    "maintainer": "unb",
+    "development_board": "blackpill_f411",
+    "bootloader": "tinyuf2",
+    "diode_direction": "COL2ROW",
+    "matrix_pins": {
+        "rows": [
+            "A4",
+            "A5",
+            "A6",
+            "B14"
+        ],
+        "cols": [
+            "A7",
+            "A8",
+            "A15",
+            "B0"
+        ]
+    },
+    "encoder": {
+        "rotary": [
+            {
+                "pin_a": "B1",
+                "pin_b": "B8"
+            },
+            {
+                "pin_a": "B9",
+                "pin_b": "A0"
+            }
+        ]
+    },
+    "features": {
+        "bootmagic": false,
+        "console": true,
+        "encoder": true,
+        "extrakey": true,
+        "mousekey": false,
+        "nkro": false
+    },
+    "usb": {
+        "vid": "0xFEED",
+        "pid": "0x4D50",
+        "device_version": "0.1.0"
+    },
+    "layouts": {
+        "LAYOUT": {
+            "layout": [
+                {
+                    "label": "K1",
+                    "matrix": [
+                        0,
+                        0
+                    ],
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "label": "K2",
+                    "matrix": [
+                        0,
+                        1
+                    ],
+                    "x": 1,
+                    "y": 0
+                },
+                {
+                    "label": "K3",
+                    "matrix": [
+                        0,
+                        2
+                    ],
+                    "x": 2,
+                    "y": 0
+                },
+                {
+                    "label": "E2",
+                    "matrix": [
+                        0,
+                        3
+                    ],
+                    "x": 3.5,
+                    "y": 0
+                },
+                {
+                    "label": "K4",
+                    "matrix": [
+                        1,
+                        0
+                    ],
+                    "x": 0,
+                    "y": 1
+                },
+                {
+                    "label": "K5",
+                    "matrix": [
+                        1,
+                        1
+                    ],
+                    "x": 1,
+                    "y": 1
+                },
+                {
+                    "label": "K6",
+                    "matrix": [
+                        1,
+                        2
+                    ],
+                    "x": 2,
+                    "y": 1
+                },
+                {
+                    "label": "K7",
+                    "matrix": [
+                        2,
+                        0
+                    ],
+                    "x": 0,
+                    "y": 2
+                },
+                {
+                    "label": "K8",
+                    "matrix": [
+                        2,
+                        1
+                    ],
+                    "x": 1,
+                    "y": 2
+                },
+                {
+                    "label": "K9",
+                    "matrix": [
+                        2,
+                        2
+                    ],
+                    "x": 2,
+                    "y": 2
+                },
+                {
+                    "label": "E1",
+                    "matrix": [
+                        2,
+                        3
+                    ],
+                    "x": 3.5,
+                    "y": 2
+                },
+                {
+                    "label": "K10",
+                    "matrix": [
+                        3,
+                        0
+                    ],
+                    "x": 0,
+                    "y": 3
+                },
+                {
+                    "label": "K11",
+                    "matrix": [
+                        3,
+                        1
+                    ],
+                    "x": 1,
+                    "y": 3
+                },
+                {
+                    "label": "K12",
+                    "matrix": [
+                        3,
+                        2
+                    ],
+                    "x": 2,
+                    "y": 3
+                }
+            ]
+        }
+    }
+}

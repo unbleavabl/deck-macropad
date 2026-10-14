@@ -1,0 +1,11 @@
+[Unit]
+Description=Macropad slide pots -> volumes
+After=pipewire.service wireplumber.service
+
+[Service]
+ExecStart=%h/.local/bin/macropad_sliders.py -c %h/.config/macropad/sliders.toml
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,2 @@
+(version 1)
+(rule "one spoke is enough" (constraint min_resolved_spokes 1))

@@ -1,0 +1,12 @@
+[Unit]
+Description=Macropad daemon (keys, knobs, sliders, screens)
+After=graphical-session.target pipewire-pulse.service
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/python3 %h/home-projects/handwired-kb/macropad/host/deckd.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target

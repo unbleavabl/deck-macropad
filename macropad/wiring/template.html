@@ -1,0 +1,858 @@
+<title>Macropad Wiring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root {
+  --bg: #eef1ee;
+  --surface: #fbfcfa;
+  --inner: #f5f7f4;
+  --ink: #18201b;
+  --muted: #5a665e;
+  --line: #c6cfc8;
+  --case: #dfe5e0;
+  --part: #ffffff;
+  --row: #2459c2;
+  --col: #b86e05;
+  --enc: #117f50;
+  --gnd: #c4332a;
+  --pwr: #a08600;
+  --warn: #c4332a;
+  --rst: #7342bd;
+  --pot: #b0287a;
+  --scr: #0b7a8a;
+  --off: #a4ada7;
+  --diode: #d63a2e;
+  --band: #141414;
+  --display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #101412;
+    --surface: #171c19;
+    --inner: #1b211e;
+    --ink: #e1e7e3;
+    --muted: #96a29a;
+    --line: #313a35;
+    --case: #242b27;
+    --part: #212824;
+    --row: #72a3ff;
+    --col: #f0a640;
+    --enc: #48c98d;
+    --gnd: #ff6d60;
+    --pwr: #f2dc3c;
+    --warn: #ff6d60;
+    --rst: #b38fff;
+    --pot: #f07ac0;
+    --scr: #4fcfe0;
+    --off: #58625c;
+    --diode: #e0483b;
+    --band: #0a0a0a;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101412;
+  --surface: #171c19;
+  --inner: #1b211e;
+  --ink: #e1e7e3;
+  --muted: #96a29a;
+  --line: #313a35;
+  --case: #242b27;
+  --part: #212824;
+  --row: #72a3ff;
+  --col: #f0a640;
+  --enc: #48c98d;
+  --gnd: #ff6d60;
+  --pwr: #f2dc3c;
+  --warn: #ff6d60;
+  --rst: #b38fff;
+  --pot: #f07ac0;
+  --scr: #4fcfe0;
+  --off: #58625c;
+  --diode: #e0483b;
+  --band: #0a0a0a;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.55 var(--body);
+  padding: 0 16px;
+}
+main {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-block: 40px 72px;
+  display: grid;
+  gap: 48px;
+}
+h1, h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1.1;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: clamp(2rem, 5vw, 2.9rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.55rem; }
+p { margin: 0; max-width: 68ch; }
+code, .pin { font-family: var(--mono); font-size: 0.88em; }
+
+header { display: grid; gap: 14px; }
+.spec {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 0.92rem;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.legend li { display: flex; align-items: center; gap: 8px; }
+.swatch { width: 22px; height: 4px; border-radius: 2px; flex: none; }
+.sw-row { background: var(--row); }
+.sw-col { background: var(--col); }
+.sw-enc { background: var(--enc); }
+.sw-gnd { background: var(--gnd); }
+.sw-pwr { background: var(--pwr); }
+.sw-rst { background: var(--rst); }
+.sw-pot { background: var(--pot); }
+.sw-scr { background: var(--scr); }
+.sw-plate { background: var(--muted); }
+.sw-bus { height: 7px; background: var(--muted); box-shadow: inset 0 0 0 2.5px var(--muted), inset 0 0 0 3.5px var(--surface); }
+.sw-jump { height: 2.5px; background: var(--muted); }
+.sw-sleeve { width: 10px; height: 14px; border-radius: 3px; background: var(--muted); }
+
+section { display: grid; gap: 16px; }
+.section-head { display: grid; gap: 6px; }
+.eyebrow {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+figure {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  display: grid;
+}
+.scroll { overflow-x: auto; padding: 18px 12px 6px; }
+.scroll svg { display: block; width: 100%; height: auto; min-width: 660px; margin: 0 auto; }
+.scroll.narrow svg { max-width: 820px; }
+figcaption {
+  border-top: 1px solid var(--line);
+  padding: 14px 18px 16px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+figcaption strong { color: var(--ink); font-weight: 600; }
+
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 28px; }
+.notes div { display: grid; gap: 4px; align-content: start; }
+.notes h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+.notes p { font-size: 0.95rem; }
+
+.warn {
+  border: 1.5px solid var(--warn);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: grid;
+  gap: 4px;
+  background: var(--surface);
+}
+.warn strong { color: var(--warn); font-family: var(--display); font-size: 1.05rem; letter-spacing: 0.02em; }
+
+ol.check { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: step; }
+ol.check li { counter-increment: step; }
+ol.check label {
+  display: grid;
+  grid-template-columns: 2.2em 18px 22px 6.5em 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+ol.check label::before {
+  content: counter(step);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  grid-column: 1;
+  grid-row: 1;
+}
+ol.check input { grid-column: 2; margin: 0; width: 17px; height: 17px; accent-color: var(--enc); }
+ol.check .swatch { grid-column: 3; }
+ol.check label:hover { background: var(--surface); }
+ol.check input:focus-visible { outline: 2px solid var(--row); outline-offset: 2px; }
+.grp { font-family: var(--display); font-weight: 600; color: var(--muted); }
+.what { font-size: 0.95rem; }
+ol.check input:checked ~ .what { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--off); }
+.check-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+.progress { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+button {
+  font: 600 0.9rem var(--display);
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+button:hover { border-color: var(--muted); }
+button:focus-visible { outline: 2px solid var(--row); outline-offset: 2px; }
+
+ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; max-width: 72ch; }
+
+@media (max-width: 560px) {
+  ol.check label { grid-template-columns: 1.6em 18px 1fr; }
+  ol.check .swatch { display: none; }
+  ol.check .grp { grid-column: 3; }
+  ol.check .what { grid-column: 3; }
+}
+
+/* drawing */
+svg text { font-family: var(--body); }
+.case { fill: var(--case); stroke: var(--line); stroke-width: 1.5; }
+.case-in { fill: var(--inner); stroke: var(--line); stroke-width: 1; }
+.boss { fill: var(--case); stroke: var(--line); stroke-width: 1; }
+.part { fill: var(--part); stroke: var(--muted); stroke-width: 1.2; }
+.shaft { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.board { fill: var(--case); stroke: var(--muted); stroke-width: 1.4; }
+.usb { fill: var(--muted); }
+.jst { fill: var(--part); stroke: var(--muted); stroke-width: 1.2; }
+.w { fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.halo { fill: none; stroke: var(--inner); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+.w-row { stroke: var(--row); }
+.w-col { stroke: var(--col); }
+.w-enc { stroke: var(--enc); }
+.w-gnd { stroke: var(--gnd); }
+.w-pwr { stroke: var(--pwr); }
+.w-rst { stroke: var(--rst); }
+.w-pot { stroke: var(--pot); }
+.w-scr { stroke: var(--scr); }
+.w-off { stroke: var(--off); stroke-dasharray: 3 4; }
+.diode { fill: var(--diode); }
+.band { fill: var(--band); }
+.diode-edge { fill: none; stroke: var(--ink); stroke-width: 1; }
+.w-plain { stroke: var(--muted); }
+.joint { fill: var(--surface); stroke-width: 2.2; }
+.j-row { stroke: var(--row); }
+.j-col { stroke: var(--col); }
+.j-enc { stroke: var(--enc); }
+.j-pot { stroke: var(--pot); }
+.j-scr { stroke: var(--scr); }
+.j-pwr { stroke: var(--pwr); }
+.j-rst { stroke: var(--rst); }
+.j-gnd { stroke: var(--gnd); }
+.pad { fill: var(--surface); stroke-width: 2.6; }
+.pad-row { stroke: var(--row); }
+.pad-col { stroke: var(--col); }
+.pad-enc { stroke: var(--enc); }
+.pad-gnd { stroke: var(--gnd); }
+.pad-pwr { stroke: var(--pwr); }
+.pad-rst { stroke: var(--rst); }
+.pad-pot { stroke: var(--pot); }
+.pad-scr { stroke: var(--scr); }
+.pad-off { stroke: var(--off); stroke-width: 1.6; }
+.pad-used { stroke: var(--ink); stroke-width: 2.2; }
+.pad-avoid { stroke: var(--off); stroke-dasharray: 2 2; }
+.tag { fill: var(--surface); stroke-width: 1.5; }
+.tag-row { stroke: var(--row); }
+.tag-col { stroke: var(--col); }
+.tag-enc { stroke: var(--enc); }
+.tag-gnd { stroke: var(--gnd); }
+.tag-pwr { stroke: var(--pwr); }
+.tag-rst { stroke: var(--rst); }
+.tag-pot { stroke: var(--pot); }
+.tag-scr { stroke: var(--scr); }
+.tag-avoid { stroke: var(--off); stroke-dasharray: 3 3; }
+.tagtxt { font-family: var(--mono); font-size: 11.5px; font-weight: 600; }
+.tt-row { fill: var(--row); }
+.tt-col { fill: var(--col); }
+.tt-enc { fill: var(--enc); }
+.tt-gnd { fill: var(--gnd); }
+.tt-pwr { fill: var(--pwr); }
+.tt-rst { fill: var(--rst); }
+.tt-pot { fill: var(--pot); }
+.tt-scr { fill: var(--scr); }
+.tt-avoid { fill: var(--muted); }
+.keyname { font-family: var(--display); font-size: 14px; font-weight: 600; fill: var(--muted); }
+.pinlbl { font-size: 11px; font-weight: 600; fill: var(--muted); }
+.pinmini { font-family: var(--mono); font-size: 7.5px; font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--part); stroke-width: 3px; stroke-linejoin: round; }
+.edge { font-family: var(--display); font-size: 12px; font-weight: 600; letter-spacing: 0.16em; fill: var(--muted); }
+.port { font-family: var(--mono); font-size: 10.5px; fill: var(--muted); }
+.padname { font-family: var(--mono); font-size: 12px; font-weight: 600; fill: var(--ink); }
+.plate { fill: var(--line); stroke: var(--muted); stroke-width: 1; }
+.metal { fill: var(--case); stroke: var(--muted); stroke-width: 1.2; }
+.knob { fill: var(--part); stroke: var(--ink); stroke-width: 1.4; }
+.spacer { fill: var(--col); fill-opacity: 0.35; stroke: var(--col); stroke-width: 1.2; }
+.cap { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
+.leader { fill: none; stroke: var(--muted); stroke-width: 1; }
+.note { font-size: 13.5px; fill: var(--ink); }
+.pinbig { font-family: var(--mono); font-size: 15px; font-weight: 600; fill: var(--ink); }
+.usblbl { font-family: var(--display); font-size: 12px; font-weight: 600; fill: var(--surface); }
+
+/* bare copper buses and the part picker */
+.bus { fill: none; stroke-width: 7; stroke-linecap: round; }
+.bus-row { stroke: var(--row); }
+.bus-col { stroke: var(--col); }
+.bus-gnd { stroke: var(--gnd); }
+.bus-pwr { stroke: var(--pwr); }
+.bus-core { fill: none; stroke: var(--surface); stroke-width: 1.6; stroke-linecap: round; opacity: 0.9; }
+.sleeve { fill: var(--muted); stroke: var(--surface); stroke-width: 1.5; }
+.keepout { fill: var(--inner); stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.busname { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; fill: var(--muted); paint-order: stroke; stroke: var(--case); stroke-width: 3px; }
+svg.wiring [data-o] { cursor: pointer; transition: opacity 0.15s; }
+svg.wiring.filtered [data-o]:not(.on) { opacity: 0.08; }
+.picker {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--bg);
+  box-shadow: 0 0 0 100vmax var(--bg);
+  clip-path: inset(0 -100vmax);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0 12px;
+  display: grid; gap: 8px;
+}
+.picker .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.picker .lbl { font-family: var(--display); font-weight: 600; font-size: 0.85rem; color: var(--muted); width: 4.2em; }
+.picker button { padding: 4px 10px; font-size: 0.82rem; }
+.picker button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.picker .status { font-size: 0.92rem; min-height: 1.4em; }
+.picker .status strong { font-weight: 600; }
+.wide { --w: min(1440px, calc(100vw - 32px)); width: var(--w); margin-inline: calc((100% - var(--w)) / 2); }
+.figbar { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; align-items: center; padding: 12px 18px 0; }
+.hint { font-size: 0.9rem; color: var(--muted); }
+.scroll.zoomed svg { min-width: 1900px; }
+.hinge { fill: var(--inner); stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 6 5; }
+.hingetxt { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 0.14em; fill: var(--muted); }
+.hingesub { font-size: 11.5px; fill: var(--muted); }
+.badge { fill: var(--surface); stroke-width: 2; }
+.badge-row { stroke: var(--row); } .badge-col { stroke: var(--col); } .badge-enc { stroke: var(--enc); }
+.badge-gnd { stroke: var(--gnd); } .badge-pwr { stroke: var(--pwr); } .badge-pot { stroke: var(--pot); }
+.badge-scr { stroke: var(--scr); } .badge-rst { stroke: var(--rst); }
+.badgetxt { font-family: var(--mono); font-size: 10.5px; font-weight: 700; }
+.pinlabel { font-family: var(--mono); font-size: 10px; font-weight: 600; fill: var(--muted); }
+.cutline { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 8 5; }
+.plug { fill: var(--ink); opacity: 0.85; }
+.plugname { font-family: var(--display); font-weight: 700; font-size: 15px; fill: var(--ink); }
+.ribbon { fill: var(--inner); stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 3; }
+.lanenum { font-family: var(--mono); font-size: 8.5px; font-weight: 600; }
+.padmini { font-family: var(--mono); font-size: 8.5px; fill: var(--muted); }
+.link, .link-halo { display: none; }
+.link-halo { fill: none; stroke: var(--inner); stroke-width: 9; }
+svg.wiring.filtered g.on .link, svg.wiring.filtered g.on .link-halo { display: inline; }
+svg.wiring [data-w] { cursor: pointer; }
+svg.wiring.hide-done .wdone { display: none; }
+.figbar .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table.harness { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+table.harness th, table.harness td { text-align: left; padding: 7px 12px; border-bottom: 1px solid var(--line); }
+table.harness thead th { font-family: var(--display); font-weight: 600; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; }
+table.harness tr.grouprow th { font-family: var(--display); font-weight: 600; background: var(--inner); }
+table.harness tbody tr[data-w] { cursor: pointer; }
+table.harness tbody tr[data-w]:hover, table.harness tbody tr[data-w]:focus-visible { background: var(--inner); outline: none; }
+table.harness tbody tr.active { background: var(--inner); box-shadow: inset 3px 0 0 var(--ink); }
+table.harness td.to { font-family: var(--mono); font-size: 0.88rem; }
+table.harness tr.done td:not(:last-child) { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--off); }
+table.harness input { width: 17px; height: 17px; accent-color: var(--enc); }
+.numbadge { display: inline-grid; place-items: center; min-width: 26px; height: 22px; padding: 0 5px; border-radius: 11px; border: 2px solid; font-family: var(--mono); font-size: 0.8rem; font-weight: 700; background: var(--surface); }
+.nb-row { border-color: var(--row); color: var(--row); } .nb-col { border-color: var(--col); color: var(--col); }
+.nb-enc { border-color: var(--enc); color: var(--enc); } .nb-gnd { border-color: var(--gnd); color: var(--gnd); }
+.nb-pwr { border-color: var(--pwr); color: var(--pwr); } .nb-pot { border-color: var(--pot); color: var(--pot); }
+.nb-scr { border-color: var(--scr); color: var(--scr); } .nb-rst { border-color: var(--rst); color: var(--rst); }
+/* harness table with a copy of the drawing beside it */
+.hsplit { display: grid; gap: 16px; align-items: start; }
+.hside { display: none; }
+@media (min-width: 1000px) {
+  .hsplit { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .hside {
+    display: block; position: sticky; top: var(--stick, 140px);
+    height: calc(100vh - var(--stick, 140px) - 16px);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px;
+  }
+  .hside svg { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+  .hside.panning svg, .hside.panning svg * { cursor: grabbing; }
+  .hside .zoombar { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; }
+  .hside .zoombar button { padding: 2px 9px; font-size: 0.85rem; min-width: 30px; background: var(--surface); }
+}
+</style>
+
+<main>
+  <header>
+    <span class="eyebrow">Handwired · no PCB · tilted deck</span>
+    <h1>Macropad Wiring</h1>
+    <div class="spec">
+      <span>12 × MX</span><span>2 × EC11</span><span>3 × slide pot</span><span>5 × 0.96" SSD1306 (I2C, via TCA9548A)</span><span>STM32F411 BlackPill · QMK</span><span>4 × 4 matrix, col2row</span><span>14 × 1N4148</span><span>USB-C only</span>
+    </div>
+    <ul class="legend" aria-label="Wire colours">
+      <li><span class="swatch sw-bus"></span>Thick line: bare copper bus</li>
+      <li><span class="swatch sw-jump"></span>Thin line: insulated jumper</li>
+      <li><span class="swatch sw-sleeve"></span>Sleeve where two buses cross</li>
+      <li><span class="numbadge nb-gnd">9</span>Same number at both ends of a wire</li>
+      <li><span class="swatch sw-row"></span>Rows</li>
+      <li><span class="swatch sw-col"></span>Columns</li>
+      <li><span class="swatch sw-enc"></span>Encoder A / B</li>
+      <li><span class="swatch sw-pot"></span>Slider pin 2</li>
+      <li><span class="swatch sw-scr"></span>Screen wires</li>
+      <li><span class="swatch sw-pwr"></span>3V3</li>
+      <li><span class="swatch sw-gnd"></span>Ground (G)</li>
+      <li><span class="swatch sw-rst"></span>Buttons</li>
+    </ul>
+  </header>
+
+  <nav class="picker" aria-label="Show one part">
+    <div class="row"><span class="lbl">Parts</span>{{PICK_PARTS}}</div>
+    <div class="row"><span class="lbl">Buses</span>{{PICK_BUSES}}<button type="button" data-clear>Show all</button></div>
+    <div class="status" id="pick-status" aria-live="polite">Pick a part, a bus or a wire number, here or in the drawing, to see only its wires.</div>
+  </nav>
+
+  <section class="wide">
+    <div class="section-head">
+      <span class="eyebrow">The wiring</span>
+      <h2>Lid above, plate below, to scale</h2>
+      <p>Lay the case out like this while you wire: the lid inside-up at the top, the plate upside down below it, their back edges together. <strong>The plate</strong> carries the bare copper buses (thick lines: one per row, one per column, a GND and a 3V3 loop) and short insulated jumpers from every part to them. <strong>The lid</strong> holds the BlackPill, the multiplexer and the two buttons. <strong>The 27 wires between them</strong> are soldered at the plate end, gather along the plate's back edge into five flat ribbons, and end in five multi-pin Dupont plugs, <strong>A to E</strong>, on male header pins on the BlackPill and the multiplexer, so the lid unplugs. Each wire's number is on its line in the fold band and in the table below: tape it at both ends. Mark pin 1 of each plug and its header so it only goes on one way.</p>
+    </div>
+    <figure>
+      <div class="figbar">
+        <span class="hint">Click or hover a number, part or bus. Pick a number, part or bus to see only its wires.</span>
+        <span class="btns">
+          <button type="button" id="hidedone" aria-pressed="false">Hide finished wires</button>
+          <button type="button" id="zoom" aria-pressed="false">Zoom in</button>
+        </span>
+      </div>
+      <div class="scroll" id="mainscroll">
+{{MAIN}}
+      </div>
+      <figcaption><strong>Thin wires that cross without a dot don't touch</strong>: they're insulated. Bare copper only crosses bare copper under a sleeve (grey block). Dots are solder joints. The plate is seen from below, so K1 is at the top right, the sliders on the right and the knob column on the left; the lid lies turned round, USB-C toward the fold. Both halves are to the same scale and line up: a point in the lid sits over the plate point straight below it when the case is closed. Check the pin numbers printed on your sliders and screens: the drawing shows them from the back.</figcaption>
+    </figure>
+  </section>
+
+  <section class="wide">
+    <div class="section-head">
+      <span class="eyebrow">Harness</span>
+      <h2>The {{HARNESS_N}} wires between plate and lid</h2>
+      <p>One row per wire, in number order. Hover a row to see that wire in the drawing; click it to keep it picked. Tick each one off once its plate end is soldered and its plug is on its pin.</p>
+    </div>
+    <div class="check-bar">
+      <span class="progress" id="hprogress" aria-live="polite"></span>
+      <button type="button" id="hclear">Clear ticks</button>
+    </div>
+    <div class="hsplit">
+    <div class="tablewrap">
+      <table class="harness" id="harness">
+        <thead><tr><th scope="col">Wire</th><th scope="col">On the plate</th><th scope="col">In the lid</th><th scope="col">Done</th></tr></thead>
+        <tbody>
+{{HARNESS}}
+        </tbody>
+      </table>
+    </div>
+    <aside class="hside" id="hside">
+      <div class="zoombar"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="fit">Fit</button></div>
+    </aside>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">How each part connects</span>
+      <h2>Buses, parts and the lid</h2>
+    </div>
+    <div class="notes">
+      <div>
+        <h3>Buses</h3>
+        <p>Bare solid copper, laid first and soldered at every joint: one wire per row and per column across the keys, and a GND and a 3V3 pair twice: across the front, just in front of the screens, and across the slider ends, joined by two insulated wires up the slider-side edge. Bare copper never crosses a circuit board. Where two buses cross, <strong>slide a piece of sleeve or heat-shrink over the upper one</strong>: bare copper on bare copper shorts. Each bus takes one numbered wire to its BlackPill pin.</p>
+      </div>
+      <div>
+        <h3>Keys</h3>
+        <p>The switch pin nearer the front sits on its column bus: solder it straight on. The other pin takes the diode's plain red end; the <strong>black band end goes to the row bus</strong>.</p>
+      </div>
+      <div>
+        <h3>Knobs</h3>
+        <p>Push pins: the one nearer the keys takes a diode to row 0 (E2) or row 2 (E1); the other joins column 3, an insulated wire up the knob-column wall from E1 to E2. C: a short jumper to the GND pin of the knob's own screen. A and B: numbered wires up the wall to the BlackPill, no diode.</p>
+      </div>
+      <div>
+        <h3>Sliders</h3>
+        <p>Pins 1 and 2 are at the back end, pin 3 alone at the front end. Pin 1 to the 3V3 bus across the slider ends; pin 3 by a short jumper to the GND pin of the slider's own screen, just in front of it. Pin 2 is a numbered wire to A1, A2 or A3, with a 100 nF capacitor standing beside the slider body, on its right as you look at it from the back: one leg to pin 2 by a short jumper, the other leg to the GND bus across the slider ends. The capacitor has no polarity.</p>
+      </div>
+      <div>
+        <h3>Screens</h3>
+        <p>4-pin I2C modules (SDA, SCL, GND, VCC, left to right from the back), all at the same address. VCC and GND by jumpers down to the front pair; S5's run down the gap between the keys and the knob column. SDA and SCL are a numbered pair to the screen's channel on the multiplexer: S1 on SD0 and SC0, up to S5 on SD4 and SC4. S1 to S3 run up between the sliders, S4 and S5 up the wall.</p>
+      </div>
+      <div>
+        <h3>Lid</h3>
+        <p>BlackPill upside down in its cradle (chips down, USB-C at the back), multiplexer glued right of it seen from above, both with male header pins, long side up, so the numbered wires plug straight on. Solder L5 to the board's own BOOT0 button before the board goes in. Mux VIN to 3V3, GND to G, SDA to B7, SCL to B6; leave A0 to A2 and RST unconnected (address 0x70). Power everything from 3V3 only.</p>
+      </div>
+    </div>
+    <figure class="diode-key">
+      <div class="scroll narrow">
+{{DIODE}}
+      </div>
+      <figcaption>Every diode in these drawings is drawn like this: <strong>red body, black band</strong>, just like the real 1N4148. The black band always faces the row bus. Turn the diode around and that key stops working.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Close-up</span>
+      <h2>One encoder up close</h2>
+      <p>An EC11 takes the place of a key. A printed 3 mm spacer ring on its bushing makes it sit lower, so the shaft doesn't stand too tall above the plate. The nut goes on from the top, without its washer.</p>
+    </div>
+    <figure>
+      <div class="scroll narrow">
+{{ENC_MOUNT}}
+      </div>
+      <figcaption>Snip off or bend flat the small anti-rotation tab next to the bushing first. If the nut can't catch the thread, hot-glue the ring to the plate and the encoder to the ring instead.</figcaption>
+    </figure>
+    <figure>
+      <div class="scroll narrow">
+{{ENC_PINS}}
+      </div>
+      <figcaption>Seen from below, the same way as the plate in the main drawing. <strong>Turn the encoder so the 3-pin side faces the front, toward the screens.</strong> The two encoders are wired the same way; only the column and the BlackPill pins for A and B differ. If a knob turns the wrong way, swap the two keycodes on that knob in the keymap and leave the wires alone.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Pin reference</span>
+      <h2>BlackPill pins and the buttons</h2>
+      <p>Seen from above as it sits in the lid cradle: upside down, chips and the board's own buttons facing the lid, back side up, USB-C pointing at the back wall. The male header strips go in from the chip side, so the long pins stick up out of the back and the short ends sit on the cradle rails; the pin names are printed next to each hole: check them before plugging each wire on.</p>
+    </div>
+    <figure>
+      <div class="scroll narrow">
+{{BLACKPILL}}
+      </div>
+      <figcaption><strong>20 pins used.</strong> G and 3V3 each have two pads; use either. Leave the grey ones alone: A9 senses USB and A10 can stop USB loading, A11 and A12 are the USB lines, B2 is BOOT1, C13 drives the LED, C14 and C15 hold a crystal. BOOT0 has no pin hole, so the B button is wired across the board's own BOOT0 button: find two of its legs that beep only while it is pressed, and solder both wires on before the board goes into the cradle, since the button ends up underneath. A0 also has the board's KEY button on it, which is fine. If your board has the small 8-pin flash chip fitted on the back, A4 to A7 are taken: tell me before wiring.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Build order</span>
+      <h2>Wiring checklist</h2>
+    </div>
+    <div class="check-bar">
+      <span class="progress" id="progress" aria-live="polite">0 of {{CHECK_N}} done</span>
+      <button type="button" id="clear">Clear ticks</button>
+    </div>
+    <ol class="check" id="checklist">
+{{CHECKLIST}}
+    </ol>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Before closing the case</span>
+      <h2>Test with a meter, USB unplugged</h2>
+    </div>
+    <ol class="steps">
+      <li>Beep setting, probes on <span class="pin">3V3</span> and <span class="pin">G</span>: it must <strong>not</strong> beep.</li>
+      <li>Diode setting, red probe on the column pin, black on the row pin, for example <span class="pin">A7</span> and <span class="pin">A4</span> for K1. Press: about 0.5–0.7 V. Release: nothing. Repeat for all 14 positions: 12 keys and both knob pushes.</li>
+      <li>A reading with the key released means that row and column touch somewhere. Nothing when pressed usually means a diode is in backwards.</li>
+      <li>Knobs: beep setting between <span class="pin">B1</span> and <span class="pin">G</span>; turning knob 1 clicks it on and off. Same for B8, then B9 and A0 for knob 2.</li>
+      <li>Sliders: resistance setting between <span class="pin">A1</span> and <span class="pin">G</span>; moving slider 1 runs it smoothly from 0 to about 10 kΩ. Same for A2 and A3.</li>
+      <li>Screens: beep each screen's VCC to 3V3 and GND to G. Its SDA and SCL beep only with its own mux channel pads (S1 SD0 and SC0, and so on).</li>
+      <li>Buses: beep each row bus against each column bus with no key pressed: none may beep. If one does, a sleeve has slipped at that crossing.</li>
+    </ol>
+  </section>
+</main>
+
+<script>
+(function () {
+  // copy the main drawing next to the harness table so a picked wire shows beside its row
+  var hside = document.getElementById('hside');
+  var side = document.querySelector('#mainscroll svg.wiring').cloneNode(true);
+  side.setAttribute('aria-hidden', 'true');
+  hside.insertBefore(side, hside.firstChild);
+
+  // zoom (wheel, buttons) and pan (drag) the side drawing by moving its viewBox
+  var vb0 = side.viewBox.baseVal, X0 = vb0.x, Y0 = vb0.y, W0 = vb0.width, H0 = vb0.height;
+  var vb = {x: X0, y: Y0, w: W0};
+  function setVB() {
+    vb.w = Math.min(Math.max(vb.w, W0 / 15), W0);
+    var h = vb.w * H0 / W0;
+    vb.x = Math.min(Math.max(vb.x, X0), X0 + W0 - vb.w);
+    vb.y = Math.min(Math.max(vb.y, Y0), Y0 + H0 - h);
+    side.setAttribute('viewBox', vb.x + ' ' + vb.y + ' ' + vb.w + ' ' + h);
+  }
+  function toSvg(cx, cy) {
+    var pt = side.createSVGPoint(); pt.x = cx; pt.y = cy;
+    return pt.matrixTransform(side.getScreenCTM().inverse());
+  }
+  function zoomAt(k, cx, cy) {
+    var p = toSvg(cx, cy), w = Math.min(Math.max(vb.w * k, W0 / 15), W0);
+    k = w / vb.w;
+    vb.x = p.x - (p.x - vb.x) * k; vb.y = p.y - (p.y - vb.y) * k; vb.w = w;
+    setVB();
+  }
+  function zoomCentre(k) { var r = side.getBoundingClientRect(); zoomAt(k, r.left + r.width / 2, r.top + r.height / 2); }
+  side.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    zoomAt(Math.exp((e.deltaMode ? e.deltaY * 30 : e.deltaY) * 0.0015), e.clientX, e.clientY);
+  }, {passive: false});
+  hside.querySelector('.zoombar').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-z]');
+    if (!b) return;
+    var z = b.getAttribute('data-z');
+    if (z === 'fit') { vb = {x: X0, y: Y0, w: W0}; setVB(); } else zoomCentre(z === 'in' ? 1 / 1.5 : 1.5);
+  });
+  var drag = null, dragged = false;
+  side.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0) return;
+    drag = {cx: e.clientX, cy: e.clientY, x: vb.x, y: vb.y, id: e.pointerId, scale: side.getScreenCTM().a};
+    dragged = false;
+  });
+  side.addEventListener('pointermove', function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.cx, dy = e.clientY - drag.cy;
+    if (!dragged && Math.abs(dx) + Math.abs(dy) < 5) return;
+    if (!dragged) { dragged = true; side.setPointerCapture(e.pointerId); hside.classList.add('panning'); }
+    vb.x = drag.x - dx / drag.scale; vb.y = drag.y - dy / drag.scale;
+    setVB();
+  });
+  function endDrag() { drag = null; hside.classList.remove('panning'); }
+  side.addEventListener('pointerup', endDrag);
+  side.addEventListener('pointercancel', endDrag);
+  // a drag ends in a click: swallow it so panning doesn't pick or clear anything
+  hside.addEventListener('click', function (e) { if (dragged) { dragged = false; e.stopPropagation(); } }, true);
+  var picker = document.querySelector('.picker');
+  function stick() { document.documentElement.style.setProperty('--stick', (picker.offsetHeight + 12) + 'px'); }
+  stick();
+  window.addEventListener('resize', stick);
+  var svgs = Array.prototype.slice.call(document.querySelectorAll('svg.wiring'));
+  var status = document.getElementById('pick-status');
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.picker [data-pick], .picker [data-bus]'));
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#harness tr[data-w]'));
+  var HINT = status.textContent;
+  var NAMES = {gnd: 'GND bus', '3v3': '3V3 bus', col3: 'column 3 (knob pushes)'};
+  function busName(n) {
+    if (NAMES[n]) return NAMES[n];
+    var m = /^(row|col)(\d)$/.exec(n);
+    return m ? (m[1] === 'row' ? 'row ' : 'column ') + m[2] : n;
+  }
+  var all = [];
+  svgs.forEach(function (svg) { all = all.concat(Array.prototype.slice.call(svg.querySelectorAll('[data-o]'))); });
+  function nets(el) { return (el.getAttribute('data-n') || '').split(' '); }
+  function isBus(n) { return /^(row\d|col\d|gnd|3v3)$/.test(n); }
+  function o(el) { return el.getAttribute('data-o'); }
+  function rowFor(w) { return rows.filter(function (r) { return r.getAttribute('data-w') === w; })[0]; }
+
+  // which drawing items to keep for a pick: returns {on: fn(el), text: html}
+  function forPart(p) {
+    var mine = {}, partners = {};
+    all.forEach(function (el) { if (o(el) === p) nets(el).forEach(function (n) { if (n !== 'body') mine[n] = true; }); });
+    function shared(el) { return nets(el).some(function (n) { return mine[n] && !isBus(n); }); }
+    all.forEach(function (el) { if (o(el) !== p && o(el) !== 'bus' && shared(el)) partners[o(el)] = true; });
+    var bus = Object.keys(mine).filter(isBus).map(busName), with_ = Object.keys(partners);
+    return {
+      on: function (el) {
+        return o(el) === p || (o(el) === 'bus' && nets(el).some(function (n) { return mine[n]; }))
+          || (o(el) !== 'bus' && shared(el)) || (partners[o(el)] && el.getAttribute('data-n') === 'body');
+      },
+      text: '<strong>' + p + '</strong>' + (bus.length ? ' joins: ' + bus.join(', ') : '')
+        + (with_.length ? (bus.length ? '; ' : ' ') + 'wired to: ' + with_.join(', ') : '') + '.'
+    };
+  }
+  function forBus(n) {
+    var owners = {};
+    all.forEach(function (el) { if (nets(el).indexOf(n) >= 0 && o(el) !== 'bus') owners[o(el)] = true; });
+    return {
+      on: function (el) { return nets(el).indexOf(n) >= 0 || (owners[o(el)] && el.getAttribute('data-n') === 'body'); },
+      text: '<strong>' + busName(n) + '</strong>: ' + Object.keys(owners).join(', ') + '.'
+    };
+  }
+  function forWire(w) {
+    var g = all.filter(function (el) { return el.getAttribute('data-w') === w; })[0];
+    if (!g) return null;
+    var owner = o(g), net = nets(g)[0], row = rowFor(w);
+    return {
+      on: function (el) {
+        if (el.getAttribute('data-w') === w) return true;
+        if (el.hasAttribute('data-w')) return false;
+        if (o(el) === owner && el.getAttribute('data-n') === 'body') return true;
+        return nets(el).indexOf(net) >= 0 && (o(el) === 'bus' || !isBus(net));
+      },
+      text: '<strong>Wire ' + w + '</strong>' + (row ? ': ' + row.children[1].textContent + ' → ' + row.children[2].textContent : '') + '.'
+    };
+  }
+  function show(sel) {
+    if (!sel) {
+      svgs.forEach(function (svg) { svg.classList.remove('filtered'); });
+      all.forEach(function (el) { el.classList.remove('on'); });
+      rows.forEach(function (r) { r.classList.remove('active'); });
+      status.textContent = HINT;
+      return;
+    }
+    all.forEach(function (el) { el.classList.toggle('on', !!sel.on(el)); });
+    svgs.forEach(function (svg) { svg.classList.add('filtered'); });
+    rows.forEach(function (r) {
+      var g = all.filter(function (el) { return el.getAttribute('data-w') === r.getAttribute('data-w'); })[0];
+      r.classList.toggle('active', !!(g && g.classList.contains('on')));
+    });
+    status.innerHTML = sel.text + ' <span class="hint">Pick it again, press Esc or click an empty spot to show everything.</span>';
+  }
+  function build(kind, id) { return kind === 'part' ? forPart(id) : kind === 'bus' ? forBus(id) : forWire(id); }
+  var current = null;     // {kind, id}
+  function restore() {
+    show(current ? build(current.kind, current.id) : null);
+    buttons.forEach(function (b) {
+      var on = current && ((current.kind === 'part' && b.getAttribute('data-pick') === current.id)
+        || (current.kind === 'bus' && b.getAttribute('data-bus') === current.id));
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  function pick(kind, id) {
+    current = (current && current.kind === kind && current.id === id) ? null : {kind: kind, id: id};
+    restore();
+  }
+  function preview(w) { var s = forWire(w); if (s) show(s); }
+
+  svgs.forEach(function (svg) {
+    svg.addEventListener('click', function (e) {
+      var w = e.target.closest('[data-w]');
+      if (w) { pick('wire', w.getAttribute('data-w')); return; }
+      var el = e.target.closest('[data-o]');
+      if (!el) { current = null; restore(); return; }
+      if (o(el) === 'bus') pick('bus', nets(el)[0]); else pick('part', o(el));
+    });
+    svg.addEventListener('mouseover', function (e) {
+      var w = e.target.closest('[data-w]');
+      if (w && !current) preview(w.getAttribute('data-w'));
+    });
+    svg.addEventListener('mouseout', function (e) {
+      var w = e.target.closest('[data-w]');
+      if (w && !current && !(e.relatedTarget && w.contains(e.relatedTarget))) restore();
+    });
+  });
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (b.hasAttribute('data-pick')) pick('part', b.getAttribute('data-pick'));
+      else pick('bus', b.getAttribute('data-bus'));
+    });
+  });
+  document.querySelector('.picker [data-clear]').addEventListener('click', function () { current = null; restore(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && current) { current = null; restore(); } });
+
+  rows.forEach(function (r) {
+    var w = r.getAttribute('data-w');
+    r.addEventListener('mouseenter', function () { preview(w); });
+    r.addEventListener('mouseleave', restore);
+    r.addEventListener('focus', function () { preview(w); });
+    r.addEventListener('blur', restore);
+    r.addEventListener('click', function (e) {
+      if (e.target.tagName === 'INPUT') return;
+      pick('wire', w);
+      if (!hside.offsetParent) document.getElementById('mainscroll').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+    });
+    r.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick('wire', w); } });
+  });
+
+  // ticks for the harness, kept in this browser
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#harness input[data-done]'));
+  var hprogress = document.getElementById('hprogress');
+  var KEY = 'macropad-harness-done';
+  var done = {};
+  var HIDEKEY = 'macropad-hide-done', hideDone = false, hidebtn = document.getElementById('hidedone');
+  try { hideDone = localStorage.getItem(HIDEKEY) === '1'; } catch (e) {}
+  function applyHide() {
+    svgs.forEach(function (svg) { svg.classList.toggle('hide-done', hideDone); });
+    hidebtn.setAttribute('aria-pressed', hideDone ? 'true' : 'false');
+  }
+  hidebtn.addEventListener('click', function () {
+    hideDone = !hideDone;
+    try { localStorage.setItem(HIDEKEY, hideDone ? '1' : '0'); } catch (e) {}
+    applyHide(); hupdate();
+  });
+  applyHide();
+  try { done = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { done = {}; }
+  function hupdate() {
+    var n = 0;
+    boxes.forEach(function (b) { var tr = b.closest('tr'); tr.classList.toggle('done', b.checked); if (b.checked) n++; });
+    hprogress.textContent = n + ' of ' + boxes.length + ' wires done';
+    // a bus counts as finished once every numbered wire on it is ticked
+    var busWires = {};
+    all.forEach(function (el) {
+      var w = el.getAttribute('data-w');
+      if (w) nets(el).filter(isBus).forEach(function (n) { (busWires[n] = busWires[n] || []).push(w); });
+    });
+    function busDone(n) { return !!busWires[n] && busWires[n].every(function (w) { return done[w]; }); }
+    all.forEach(function (el) {
+      var w = el.getAttribute('data-w');
+      if (w) el.classList.toggle('wdone', !!done[w]);
+      else if (o(el) === 'bus') el.classList.toggle('wdone', nets(el).every(busDone));
+    });
+    hidebtn.textContent = (hideDone ? 'Show' : 'Hide') + ' finished wires' + (n ? ' (' + n + ')' : '');
+  }
+  boxes.forEach(function (b) {
+    b.checked = !!done[b.getAttribute('data-done')];
+    b.addEventListener('change', function () {
+      done[b.getAttribute('data-done')] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {}
+      hupdate();
+    });
+  });
+  document.getElementById('hclear').addEventListener('click', function () {
+    boxes.forEach(function (b) { b.checked = false; }); done = {};
+    try { localStorage.setItem(KEY, '{}'); } catch (e) {}
+    hupdate();
+  });
+  hupdate();
+
+  var zoom = document.getElementById('zoom'), sc = document.getElementById('mainscroll');
+  zoom.addEventListener('click', function () {
+    var on = !sc.classList.contains('zoomed');
+    sc.classList.toggle('zoomed', on);
+    zoom.setAttribute('aria-pressed', on ? 'true' : 'false');
+    zoom.textContent = on ? 'Fit to width' : 'Zoom in';
+  });
+})();
+(function () {
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#checklist input'));
+  var progress = document.getElementById('progress');
+  var KEY = 'macropad-wiring-checks';
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(boxes.map(function (b) { return b.checked; }))); } catch (e) {}
+  }
+  function update() {
+    var n = boxes.filter(function (b) { return b.checked; }).length;
+    progress.textContent = n + ' of ' + boxes.length + ' done';
+  }
+  var saved = load();
+  boxes.forEach(function (b, i) {
+    b.checked = !!saved[i];
+    b.addEventListener('change', function () { save(); update(); });
+  });
+  document.getElementById('clear').addEventListener('click', function () {
+    boxes.forEach(function (b) { b.checked = false; });
+    save(); update();
+  });
+  update();
+})();
+</script>

@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "deckd tab volume",
+  "version": "1.0",
+  "description": "Lets the macropad's focused-app slider set the volume of the media in the active tab of the focused window.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3bZLobwnqORzOm90iBYz6rTqT2YvZG3rw1lnKV3lvKSXFxba8ffnNZjKyGJWH/UHX9MBly9GGxEDnBOKBjwfPqMNgJJmqsh1PdA6bOc4qAAWkVJXx5PzdddRV+lkqQQoI1jQP6xQ407xQewn5UwodrI2gdCR3SJClQS1KTYfavzIKhb24K4hQq8I/KRic+mmByAFluVwXDW9v+iYXsNGT1QmxOBF9YpYQ1r5z+xEtY9VU1XPmPtQhgRzD1uTEqse9eBOgPHiQ5CLuT/VbAL84xlRnPsusqLLXGWEpNw4WRMx8rtIkMvJyiu2i/pHeCgRoxwNR4FJEOwFDfrup4PH1QIDAQAB",
+  "permissions": ["nativeMessaging", "scripting", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" }
+}

@@ -1,0 +1,13 @@
+# build output
+build/
+__pycache__/
+*.pyc
+
+# slicer CLI output
+result.json
+
+# editor / OS
+*.swp
+*~
+.DS_Store
+.bak-screens/

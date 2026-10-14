@@ -1,0 +1,65 @@
+# deckd config. install.sh copies this to ~/.config/deckd/config.toml; edit that copy, then
+# `systemctl --user restart deckd`. Every key and knob is handled here; no reflashing.
+
+# ---- Keys, as on the pad:   K1  K2  K3
+#                             K4  K5  K6
+#                             K7  K8  K9
+#                             K10 K11 K12
+# `run` is a shell command, started in the background on key down. `notify = true`: once it
+# exits, its last line of output is shown as a notification headed by the label (for actions
+# that give no feedback of their own; the others already show a toast or OSD).
+[keys]
+K1  = { label = "Caps <> Ctrl",      run = "~/.local/bin/toggle-caps-ctrl" }
+K2  = { label = "Region screenshot", run = "omarchy-capture-screenshot region" }
+K3  = { label = "Clipboard",         run = "omarchy-shell shell toggle omarchy.clipboard" }
+K4  = { label = "Calculator",        run = "pkill -x omacalc || omacalc" }
+K5  = { label = "Mic mute",          run = "omarchy-audio-input-mute" }
+K6  = { label = "Switch output",     run = "omarchy-audio-output-switch" }
+K7  = { label = "Screen record",     run = "omarchy-capture-screenrecording --stop-recording || omarchy-menu toggle trigger.capture.screenrecord" }
+K8  = { label = "Copy text (OCR)",   run = "pkill -x slurp || omarchy-capture-text" }
+K9  = { label = "Color picker",      run = "pkill hyprpicker || hyprpicker -a | sed 's/$/ copied/'", notify = true }
+K10 = { label = "Voice typing",      run = "~/.local/bin/voxtype-toggle" }
+K11 = { label = "Do not disturb",    run = "omarchy-toggle-notification-silencing; omarchy-shell notifications dndState", notify = true }
+K12 = { label = "Keep awake",        run = "omarchy-toggle-idle | sed 's/disabled/on/;s/enabled/off/'", notify = true }
+
+# ---- Knobs. E1 = front (screen S4), E2 = back (screen S5).
+# type "media":      seek `seek` s a click (browsers: the page's arrow keys, 5 s on YouTube);
+#                    hold push + turn = previous / next track;
+#                    push alone = play / pause (screen: track title, elapsed time)
+# type "nightlight": colour temperature (clockwise = warmer), push = night light on/off
+# type "command":    cw / ccw / push shell commands, label / text for its screen
+#                    and `icon` (default "gear"; any name from deckd.py ICONS)
+# `info` (knobs and sliders): shown big once the screen is idle 3 s, its value small:
+#   { time = "<tz>", tag = "..." } clock, { date = true }, { weather = "lat,lon" } (or a place name)
+[knob.E1]
+type = "media"
+seek = 5
+info = { weather = "18.52,73.94" }  # Amanora Park Town, Hadapsar, Pune
+
+[knob.E2]
+type = "nightlight"
+step = 250
+min  = 2500
+info = { date = true }
+
+# ---- Sliders S1-S3, left to right. target:
+#   "master"      output volume (the sink Omarchy's volume keys change)
+#   "focused"     the app of the focused window (matched by PID, then by window class)
+#   "brightness"  all DDC/CI monitors (ddcutil); `buses = [4, 5]` to pick, default all
+#   "mic"         default input volume
+#   "apps"        streams whose name or binary contains one of `apps = [...]`
+# A slider acts only when moved, not when the pad connects.
+[[slider]]
+label  = "MASTER"
+target = "master"
+info   = { time = "Asia/Kolkata", tag = "INDIA" }
+
+[[slider]]
+label  = "FOCUSED"   # replaced by the window's app name
+target = "focused"
+info   = { time = "America/New_York", tag = "NEW YORK" }
+
+[[slider]]
+label  = "BRIGHTNESS"
+target = "brightness"
+info   = { time = "Australia/Melbourne", tag = "MELBOURNE" }

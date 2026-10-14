@@ -1,0 +1,30 @@
+# What each slide pot does. Slider 1 is the left one.
+# Restart the helper after editing (systemctl --user restart macropad-sliders).
+#
+# action = "master"      default output volume
+# action = "mic"         default microphone volume
+# action = "app"         volume of programs matching `apps` (see --apps for names)
+# action = "brightness"  screen brightness (brightnessctl)
+# action = "command"     any shell command; {percent} is 0-100, {value} is 0.0-1.0
+
+device_name = "Macropad"   # part of the device name, as shown by --list
+max_rate_hz = 20           # per slider, so audio daemons are not flooded
+end_snap_percent = 2       # the last 2% at each end count as 0 / 100
+invert = false             # true if 100% ends up at the bottom of the slope
+
+[[slider]]
+name = "music"
+axis = "x"
+action = "app"
+apps = ["spotify", "firefox"]
+
+[[slider]]
+name = "voice"
+axis = "y"
+action = "app"
+apps = ["discord", "vesktop", "zoom"]
+
+[[slider]]
+name = "master"
+axis = "z"
+action = "master"
